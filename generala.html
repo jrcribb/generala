@@ -1,0 +1,3054 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tanteador de Generala | Anotador Oficial hasta 8 Jugadores</title>
+  <meta name="description" content="Tanteador digital para La Generala de 1 a 8 jugadores. Modo orden de carga o aleatorio, alias personalizables, reglas oficiales y guardado automático.">
+  
+  <!-- FAVICON EMBEBIDO (Dado Dorado y Esmeralda) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='22' fill='%230d2818' stroke='%23e5c158' stroke-width='6'/%3E%3Ccircle cx='28' cy='28' r='9' fill='%23f6d878'/%3E%3Ccircle cx='72' cy='28' r='9' fill='%23f6d878'/%3E%3Ccircle cx='50' cy='50' r='9' fill='%23f6d878'/%3E%3Ccircle cx='28' cy='72' r='9' fill='%23f6d878'/%3E%3Ccircle cx='72' cy='72' r='9' fill='%23f6d878'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='22' fill='%230d2818' stroke='%23e5c158' stroke-width='6'/%3E%3Ccircle cx='28' cy='28' r='9' fill='%23f6d878'/%3E%3Ccircle cx='72' cy='28' r='9' fill='%23f6d878'/%3E%3Ccircle cx='50' cy='50' r='9' fill='%23f6d878'/%3E%3Ccircle cx='28' cy='72' r='9' fill='%23f6d878'/%3E%3Ccircle cx='72' cy='72' r='9' fill='%23f6d878'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+/* ==========================================================================
+   TANTEADOR DE GENERALA - DESIGN SYSTEM & STYLES
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Premium Midnight Casino / Velvet Boardgame */
+  --bg-primary: #070d0b;
+  --bg-surface: #0e1a15;
+  --bg-card: rgba(18, 34, 27, 0.75);
+  --bg-card-hover: rgba(26, 48, 38, 0.85);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(229, 193, 88, 0.35);
+  
+  /* Gold / Champagne Accents */
+  --gold-primary: #e5c158;
+  --gold-bright: #f6d878;
+  --gold-glow: rgba(229, 193, 88, 0.25);
+  --gold-gradient: linear-gradient(135deg, #f6d878 0%, #d4a737 100%);
+
+  /* Typography Colors */
+  --text-main: #f0fdf4;
+  --text-muted: #8fa99c;
+  --text-dim: #5c7568;
+
+  /* State Colors */
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  /* Player Signature Jewel Tones (1 to 8) */
+  --p1-color: #10b981; /* Emerald */
+  --p2-color: #f59e0b; /* Amber Gold */
+  --p3-color: #3b82f6; /* Sapphire */
+  --p4-color: #ec4899; /* Ruby Pink */
+  --p5-color: #8b5cf6; /* Amethyst */
+  --p6-color: #06b6d4; /* Turquoise */
+  --p7-color: #f97316; /* Coral Orange */
+  --p8-color: #a855f7; /* Royal Purple */
+
+  /* Dimensions & Spacing */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+  --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-subtle);
+  --shadow-glow: 0 0 25px rgba(229, 193, 88, 0.25);
+
+  /* Fonts */
+  --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Base Reset & Typography */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  font-size: 15px;
+  line-height: 1.4;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(20, 60, 42, 0.4) 0%, transparent 60%),
+    radial-gradient(circle at 10% 80%, rgba(16, 45, 33, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(229, 193, 88, 0.05) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* Container */
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Screen Management */
+.screen {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  width: 100%;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   SETUP SCREEN
+   ========================================================================== */
+
+#setup-screen {
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+}
+
+.setup-card {
+  width: 100%;
+  max-width: 620px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-top: 2px solid var(--gold-primary);
+}
+
+.setup-header {
+  text-align: center;
+  position: relative;
+}
+
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 2.2rem;
+  color: var(--gold-bright);
+  text-shadow: 0 0 20px var(--gold-glow);
+  margin-bottom: 8px;
+  animation: floatDice 3s ease-in-out infinite;
+}
+
+@keyframes floatDice {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(4deg); }
+}
+
+.setup-header h1 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #d4e8dd 60%, var(--gold-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.setup-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--gold-bright);
+}
+
+.badge {
+  background: rgba(229, 193, 88, 0.15);
+  color: var(--gold-bright);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid rgba(229, 193, 88, 0.3);
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Pills count selector */
+.player-count-pills {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+}
+
+.pill-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  padding: 10px 0;
+  border-radius: var(--radius-md);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pill-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.pill-btn.active {
+  background: var(--gold-gradient);
+  color: #0d1a13;
+  border-color: var(--gold-bright);
+  box-shadow: 0 4px 15px rgba(229, 193, 88, 0.35);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Players Input List */
+.players-input-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 290px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.players-input-list::-webkit-scrollbar {
+  width: 6px;
+}
+.players-input-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.player-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  transition: border-color 0.2s;
+}
+
+.player-input-row:focus-within {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 10px rgba(229, 193, 88, 0.15);
+}
+
+.player-row-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #fff;
+  flex-shrink: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.player-alias-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 600;
+  outline: none;
+}
+
+.player-alias-input::placeholder {
+  color: var(--text-dim);
+}
+
+.player-order-badge {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Order selection buttons */
+.order-toggle-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.order-btn {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.order-btn .icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.order-btn-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-btn-text strong {
+  font-size: 0.92rem;
+  margin-bottom: 2px;
+}
+
+.order-btn-text span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.order-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.order-btn.active {
+  border-color: var(--gold-primary);
+  background: rgba(229, 193, 88, 0.12);
+  box-shadow: 0 0 16px rgba(229, 193, 88, 0.15);
+}
+
+.order-btn.active strong {
+  color: var(--gold-bright);
+}
+
+/* Rules Section */
+.rules-section {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rule-toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.rule-toggle-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rule-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.rule-name {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.rule-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+/* Switch toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.12);
+  transition: 0.3s;
+  border-radius: 24px;
+  border: 1px solid var(--border-subtle);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* Custom Select */
+.custom-select {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-subtle);
+  color: var(--gold-bright);
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  outline: none;
+  cursor: pointer;
+}
+
+.custom-select option {
+  background: #0d1a14;
+  color: #fff;
+}
+
+/* Buttons */
+.setup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.btn-primary {
+  background: var(--gold-gradient);
+  color: #0c1811;
+  border: none;
+  padding: 16px 24px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-main);
+  font-size: 1.1rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(229, 193, 88, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(229, 193, 88, 0.45);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: center;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  padding: 8px 16px;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  color: #fff;
+}
+
+/* ==========================================================================
+   GAME SCREEN
+   ========================================================================== */
+
+#game-screen {
+  padding-bottom: 70px;
+}
+
+/* Game Header */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  margin: 12px 12px 8px 12px;
+  border-radius: var(--radius-md);
+  position: sticky;
+  top: 8px;
+  z-index: 50;
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.round-indicator {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.round-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.round-value {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--gold-bright);
+}
+
+/* Current Turn Banner */
+.turn-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 16px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-subtle);
+  animation: pulseTurn 2.5s infinite;
+}
+
+@keyframes pulseTurn {
+  0%, 100% { border-color: rgba(229, 193, 88, 0.3); box-shadow: 0 0 10px rgba(229, 193, 88, 0.1); }
+  50% { border-color: var(--gold-bright); box-shadow: 0 0 20px rgba(229, 193, 88, 0.3); }
+}
+
+.turn-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--p1-color);
+}
+
+.turn-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.turn-hint {
+  font-size: 0.62rem;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.turn-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  max-width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.view-toggle-btn {
+  background: rgba(229, 193, 88, 0.15);
+  border: 1px solid rgba(229, 193, 88, 0.3);
+  color: var(--gold-bright);
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-toggle-btn:hover {
+  background: rgba(229, 193, 88, 0.25);
+}
+
+/* Leaderboard Ribbon */
+.leaderboard-strip {
+  display: flex;
+  gap: 8px;
+  padding: 4px 14px 10px 14px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.leaderboard-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.rank-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(14, 26, 21, 0.8);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.rank-chip.leader {
+  border-color: var(--gold-primary);
+  background: rgba(229, 193, 88, 0.14);
+}
+
+.rank-chip-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.rank-chip-name {
+  font-weight: 600;
+  color: var(--text-main);
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rank-chip-score {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--gold-bright);
+}
+
+/* Views Management */
+.view-container {
+  display: none;
+  padding: 0 12px;
+}
+
+.view-container.active {
+  display: block;
+}
+
+/* ==========================================================================
+   VIEW 1: SCORECARD TABLE
+   ========================================================================== */
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(100vh - 200px);
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.scorecard-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+}
+
+/* Sticky first column */
+.sticky-col {
+  position: sticky;
+  left: 0;
+  background: #0d1a15;
+  z-index: 10;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.4);
+}
+
+th, td {
+  padding: 10px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+/* Category column styling */
+.category-col {
+  text-align: left;
+  min-width: 135px;
+  font-weight: 700;
+  color: #e5ece8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cat-icon {
+  font-size: 1.1rem;
+}
+
+/* Table Head */
+thead tr th {
+  background: #09130f;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+thead tr th.sticky-col {
+  z-index: 30;
+}
+
+.player-col-header {
+  min-width: 110px;
+  padding: 12px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.player-col-header.is-turn {
+  background: rgba(229, 193, 88, 0.12);
+  border-top: 3px solid var(--gold-primary);
+}
+
+.p-header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.p-header-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.p-header-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  max-width: 95px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.p-header-turn-tag {
+  font-size: 0.65rem;
+  background: var(--gold-primary);
+  color: #0c1811;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+}
+
+/* Score Cells */
+.score-cell {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  min-width: 90px;
+  background: rgba(14, 26, 21, 0.4);
+}
+
+.score-cell:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.score-cell.active-col {
+  background: rgba(229, 193, 88, 0.04);
+}
+
+.score-cell.highlight-turn {
+  background: rgba(229, 193, 88, 0.12);
+  box-shadow: inset 0 0 0 1.5px rgba(229, 193, 88, 0.4);
+}
+
+.score-cell.empty {
+  color: transparent;
+}
+
+.score-cell.empty:hover {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.score-cell.empty:hover::before {
+  content: "+";
+  font-size: 1.2rem;
+  color: var(--gold-bright);
+}
+
+/* Cell Statuses */
+.score-cell.scratched {
+  color: var(--color-danger);
+  font-weight: 800;
+  text-decoration: line-through;
+  text-decoration-thickness: 3px;
+  text-decoration-color: rgba(239, 68, 68, 0.8);
+}
+
+.score-cell.servida {
+  color: var(--gold-bright);
+  text-shadow: 0 0 10px rgba(229, 193, 88, 0.4);
+}
+
+.score-cell.servida::after {
+  content: "★";
+  font-size: 0.65rem;
+  vertical-align: super;
+  margin-left: 2px;
+  color: var(--gold-bright);
+}
+
+.score-cell.armada {
+  color: #fff;
+}
+
+/* Table Footer */
+.total-row th, .total-row td {
+  background: #09130f;
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--gold-bright);
+  border-top: 2px solid rgba(229, 193, 88, 0.3);
+}
+
+.rank-row th, .rank-row td {
+  background: #060e0a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.rank-badge-leader {
+  color: var(--gold-bright);
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* ==========================================================================
+   VIEW 2: FOCUS PLAYER VIEW
+   ========================================================================== */
+
+.focus-player-card {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.focus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 14px;
+}
+
+.focus-player-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.focus-num {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  background: var(--p1-color);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.focus-details h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.focus-score {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--gold-bright);
+  font-weight: 700;
+}
+
+.focus-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-arrow-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.nav-arrow-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: scale(1.05);
+}
+
+/* Focus Categories Grid */
+.focus-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.focus-cat-btn {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-main);
+  text-align: left;
+}
+
+.focus-cat-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.focus-cat-btn.filled {
+  background: rgba(14, 34, 25, 0.5);
+  border-color: rgba(229, 193, 88, 0.25);
+}
+
+.focus-cat-btn.scratched {
+  opacity: 0.65;
+}
+
+.focus-cat-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.focus-cat-icon {
+  font-size: 1.3rem;
+}
+
+.focus-cat-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.focus-cat-value {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--gold-bright);
+}
+
+.focus-cat-value.empty {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  font-family: var(--font-main);
+}
+
+.focus-cat-value.scratched {
+  color: var(--color-danger);
+  text-decoration: line-through;
+}
+
+/* ==========================================================================
+   GAME FOOTER
+   ========================================================================== */
+
+.game-footer {
+  position: fixed;
+  bottom: 8px;
+  left: 12px;
+  right: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 12px;
+  z-index: 50;
+  border-radius: var(--radius-pill);
+}
+
+.footer-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.footer-btn.danger:hover {
+  color: var(--color-danger);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+/* ==========================================================================
+   SCORE SELECTION MODAL
+   ========================================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.modal-backdrop.open {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-dialog {
+  width: 100%;
+  max-width: 480px;
+  background: #0f1e18;
+  border: 1px solid var(--border-glow);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), var(--shadow-glow);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transform: scale(0.95);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-backdrop.open .modal-dialog {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-cat-icon {
+  font-size: 1.8rem;
+}
+
+.modal-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.modal-player-sub {
+  font-size: 0.85rem;
+  color: var(--gold-bright);
+  font-weight: 600;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+/* Modal Option Grid for Numbers */
+.dice-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.dice-opt-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dice-opt-btn:hover {
+  background: rgba(229, 193, 88, 0.14);
+  border-color: var(--gold-primary);
+  transform: translateY(-2px);
+}
+
+.dice-opt-visual {
+  font-size: 1.3rem;
+  letter-spacing: 2px;
+}
+
+.dice-opt-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.dice-opt-score {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--gold-bright);
+}
+
+/* Modal Major Game Options (Escalera, Full, Poker, Generala) */
+.major-options-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.major-opt-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.major-opt-btn:hover {
+  background: rgba(229, 193, 88, 0.15);
+  border-color: var(--gold-primary);
+  transform: translateY(-2px);
+}
+
+.major-opt-title {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.major-opt-title strong {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.major-opt-title span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.major-opt-score {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--gold-bright);
+}
+
+.btn-scratch {
+  width: 100%;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-scratch:hover {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: var(--color-danger);
+  color: #fff;
+}
+
+.scratch-x {
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+/* ==========================================================================
+   PODIUM & VICTORY MODAL
+   ========================================================================== */
+
+.podium-modal-card {
+  max-width: 540px;
+  text-align: center;
+}
+
+.podium-header {
+  margin-bottom: 8px;
+}
+
+.trophy-sparkle {
+  font-size: 3.5rem;
+  animation: bounceTrophy 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes bounceTrophy {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-8px) scale(1.08); }
+}
+
+.podium-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.podium-stage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+  height: 180px;
+  margin: 10px 0 20px 0;
+  padding-bottom: 8px;
+}
+
+.podium-pillar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  padding-top: 10px;
+  transition: transform 0.3s;
+}
+
+.pillar-1 {
+  height: 150px;
+  background: linear-gradient(180deg, rgba(229, 193, 88, 0.4) 0%, rgba(229, 193, 88, 0.1) 100%);
+  border: 1px solid var(--gold-bright);
+  order: 2;
+}
+
+.pillar-2 {
+  height: 120px;
+  background: linear-gradient(180deg, rgba(203, 213, 225, 0.35) 0%, rgba(203, 213, 225, 0.08) 100%);
+  border: 1px solid rgba(203, 213, 225, 0.5);
+  order: 1;
+}
+
+.pillar-3 {
+  height: 95px;
+  background: linear-gradient(180deg, rgba(217, 119, 6, 0.35) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border: 1px solid rgba(217, 119, 6, 0.5);
+  order: 3;
+}
+
+.podium-player-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.podium-player-pts {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--gold-bright);
+}
+
+.podium-rank-tag {
+  font-size: 1.3rem;
+  margin-top: 6px;
+}
+
+/* Podium Table */
+.podium-table-wrapper {
+  max-height: 180px;
+  overflow-y: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: rgba(0, 0, 0, 0.25);
+  margin-bottom: 16px;
+}
+
+.podium-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.podium-table th, .podium-table td {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: left;
+}
+
+.podium-table td:nth-child(3), .podium-table td:nth-child(4) {
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.podium-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Quick Rules Modal */
+.rules-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.rule-card {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--gold-primary);
+}
+
+.rule-card h4 {
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+  color: var(--gold-bright);
+}
+
+.rule-card p {
+  font-size: 0.85rem;
+  color: #d1ded8;
+}
+
+/* Confetti Canvas */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+@media (max-width: 600px) {
+  .setup-card {
+    padding: 20px 14px;
+  }
+  
+  .player-count-pills {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .order-toggle-group {
+    grid-template-columns: 1fr;
+  }
+
+  .turn-name {
+    max-width: 90px;
+  }
+
+  .game-header {
+    margin: 8px 6px;
+    padding: 8px 10px;
+  }
+
+  .focus-categories-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dice-options-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- SETUP SCREEN -->
+    <section id="setup-screen" class="screen active">
+      <div class="setup-card glass-panel">
+        <header class="setup-header">
+          <div class="logo-badge">
+            <span class="dice-icon">⚄</span>
+            <span class="dice-icon-sub">⚅</span>
+          </div>
+          <h1>Tanteador de Generala</h1>
+          <p class="subtitle">Planilla profesional para hasta 8 jugadores</p>
+        </header>
+
+        <!-- Player count selector -->
+        <div class="setup-section">
+          <div class="section-title-row">
+            <label class="section-label">Cantidad de Jugadores</label>
+            <span id="player-count-badge" class="badge">2 Jugadores</span>
+          </div>
+          <div class="player-count-pills" id="player-count-selector">
+            <button type="button" class="pill-btn" data-count="1">1</button>
+            <button type="button" class="pill-btn active" data-count="2">2</button>
+            <button type="button" class="pill-btn" data-count="3">3</button>
+            <button type="button" class="pill-btn" data-count="4">4</button>
+            <button type="button" class="pill-btn" data-count="5">5</button>
+            <button type="button" class="pill-btn" data-count="6">6</button>
+            <button type="button" class="pill-btn" data-count="7">7</button>
+            <button type="button" class="pill-btn" data-count="8">8</button>
+          </div>
+        </div>
+
+        <!-- Players Alias List -->
+        <div class="setup-section">
+          <div class="section-title-row">
+            <label class="section-label">Jugadores y Alias</label>
+            <span class="hint">Toca para editar el nombre</span>
+          </div>
+          <div class="players-input-list" id="players-input-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Turn Order Mode -->
+        <div class="setup-section">
+          <label class="section-label">Orden de Tiro</label>
+          <div class="order-toggle-group">
+            <button type="button" class="order-btn active" id="order-btn-sequence" data-order="sequence">
+              <span class="icon">📋</span>
+              <div class="order-btn-text">
+                <strong>Orden de Carga</strong>
+                <span>Juegan en el orden que fueron anotados</span>
+              </div>
+            </button>
+            <button type="button" class="order-btn" id="order-btn-random" data-order="random">
+              <span class="icon">🎲</span>
+              <div class="order-btn-text">
+                <strong>Sorteo Aleatorio (Random)</strong>
+                <span>El sistema sortea los turnos al azar</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Rules Options -->
+        <div class="setup-section rules-section">
+          <label class="section-label">Reglas y Opciones</label>
+          <div class="rule-toggle-row">
+            <div class="rule-info">
+              <span class="rule-name">Doble Generala</span>
+              <span class="rule-desc">100 pts normal / 120 pts servida</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="rule-doble-generala" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <div class="rule-toggle-row">
+            <div class="rule-info">
+              <span class="rule-name">Generala Servida</span>
+              <span class="rule-desc" id="generala-servida-desc">Gana la partida automáticamente</span>
+            </div>
+            <select id="rule-generala-servida-mode" class="custom-select">
+              <option value="win" selected>Gana Partida</option>
+              <option value="60">Suma 60 Pts</option>
+            </select>
+          </div>
+
+          <div class="rule-toggle-row">
+            <div class="rule-info">
+              <span class="rule-name">Sonidos de Dados</span>
+              <span class="rule-desc">Efectos sonoros sutiles de juego</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="rule-sound" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Start Game Button -->
+        <div class="setup-actions">
+          <button type="button" id="btn-start-game" class="btn-primary glow-button">
+            <span>¡Comenzar Partida!</span>
+            <span class="arrow">➔</span>
+          </button>
+          <button type="button" id="btn-resume-game" class="btn-secondary" style="display: none;">
+            🔄 Continuar Partida Guardada
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME SCREEN -->
+    <section id="game-screen" class="screen">
+      <!-- Top App Bar -->
+      <header class="game-header glass-panel">
+        <div class="header-left">
+          <button type="button" id="btn-menu-setup" class="icon-btn" title="Ajustes y Menú" aria-label="Ajustes">
+            ⚙️
+          </button>
+          <div class="round-indicator">
+            <span class="round-label">RONDA</span>
+            <span class="round-value" id="current-round-text">1/11</span>
+          </div>
+        </div>
+
+        <div class="turn-banner" id="turn-banner">
+          <div class="turn-avatar" id="current-turn-avatar">1</div>
+          <div class="turn-info">
+            <span class="turn-hint">TURNO DE</span>
+            <span class="turn-name" id="current-turn-name">Jugador 1</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button type="button" id="btn-undo" class="icon-btn" title="Deshacer última anotación" aria-label="Deshacer" disabled>
+            ↩️
+          </button>
+          <button type="button" id="btn-toggle-view" class="view-toggle-btn" title="Cambiar Vista">
+            <span id="view-icon">📱</span>
+            <span id="view-name">Modo Foco</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Game Area -->
+      <main class="game-main">
+        
+        <!-- Live Leaderboard Ribbon -->
+        <div class="leaderboard-strip" id="leaderboard-strip">
+          <!-- Dynamically populated ranking pills -->
+        </div>
+
+        <!-- VIEW 1: FULL SCORECARD TABLE (Planilla Clásica) -->
+        <div id="view-table" class="view-container active">
+          <div class="table-wrapper">
+            <table class="scorecard-table" id="scorecard-table">
+              <thead>
+                <tr id="table-head-row">
+                  <th class="sticky-col category-col">Juego</th>
+                  <!-- Dynamic player header columns -->
+                </tr>
+              </thead>
+              <tbody id="table-body">
+                <!-- Dynamic category rows -->
+              </tbody>
+              <tfoot>
+                <tr id="table-total-row" class="total-row">
+                  <th class="sticky-col category-col">TOTAL</th>
+                  <!-- Dynamic total columns -->
+                </tr>
+                <tr id="table-rank-row" class="rank-row">
+                  <th class="sticky-col category-col">PUESTO</th>
+                  <!-- Dynamic ranking columns -->
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- VIEW 2: FOCUS PLAYER VIEW (Modo Jugador Actual para móviles) -->
+        <div id="view-focus" class="view-container">
+          <div class="focus-player-card glass-panel" id="focus-player-card">
+            <div class="focus-header">
+              <div class="focus-player-badge" id="focus-player-badge">
+                <span class="focus-num" id="focus-num">1</span>
+                <div class="focus-details">
+                  <h2 class="focus-name" id="focus-name">Jugador 1</h2>
+                  <span class="focus-score" id="focus-total-score">Total: 0 pts</span>
+                </div>
+              </div>
+              <div class="focus-nav">
+                <button type="button" class="nav-arrow-btn" id="focus-prev" title="Jugador Anterior">◀</button>
+                <button type="button" class="nav-arrow-btn" id="focus-next" title="Siguiente Jugador">▶</button>
+              </div>
+            </div>
+
+            <div class="focus-categories-grid" id="focus-categories-grid">
+              <!-- Dynamically populated buttons for each category for current player -->
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Bottom Quick Action Bar -->
+      <footer class="game-footer glass-panel">
+        <button type="button" id="btn-quick-rules" class="footer-btn">
+          📖 Reglas Rápidas
+        </button>
+        <button type="button" id="btn-finish-check" class="footer-btn">
+          🏆 Ver Podio
+        </button>
+        <button type="button" id="btn-new-game-footer" class="footer-btn danger">
+          🔄 Nueva Partida
+        </button>
+      </footer>
+    </section>
+
+    <!-- SCORE SELECTION MODAL -->
+    <div id="score-modal" class="modal-backdrop">
+      <div class="modal-dialog glass-panel score-modal-card">
+        <header class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-cat-icon" id="modal-cat-icon">🎲</span>
+            <div>
+              <h3 class="modal-title" id="modal-cat-name">Categoría</h3>
+              <span class="modal-player-sub" id="modal-player-sub">Para Jugador 1</span>
+            </div>
+          </div>
+          <button type="button" class="modal-close-btn" id="modal-close">✕</button>
+        </header>
+
+        <div class="modal-body" id="modal-options-container">
+          <!-- Dynamic buttons for selected category -->
+        </div>
+
+        <div class="modal-scratch-action">
+          <button type="button" class="btn-scratch" id="modal-btn-scratch">
+            <span class="scratch-x">✕</span>
+            <span>Tachar Casilla (0 puntos)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VICTORY / PODIUM MODAL -->
+    <div id="podium-modal" class="modal-backdrop">
+      <div class="modal-dialog glass-panel podium-modal-card">
+        <header class="podium-header">
+          <div class="trophy-sparkle">🏆</div>
+          <h2 id="podium-title">¡Fin de la Partida!</h2>
+          <p id="podium-subtitle">Podio Oficial de la Generala</p>
+        </header>
+
+        <div class="podium-stage" id="podium-stage">
+          <!-- 2nd, 1st, 3rd places visually -->
+        </div>
+
+        <div class="podium-table-wrapper">
+          <table class="podium-table" id="podium-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Jugador</th>
+                <th>Puntos</th>
+                <th>Efectividad</th>
+              </tr>
+            </thead>
+            <tbody id="podium-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="podium-actions">
+          <button type="button" id="btn-rematch" class="btn-primary glow-button">
+            🎲 ¡Revancha! (Mismos Jugadores)
+          </button>
+          <button type="button" id="btn-new-setup" class="btn-secondary">
+            ⚙️ Configurar Nueva Partida
+          </button>
+          <button type="button" id="btn-close-podium" class="btn-ghost">
+            Volver a la Planilla
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK RULES MODAL -->
+    <div id="rules-modal" class="modal-backdrop">
+      <div class="modal-dialog glass-panel rules-modal-card">
+        <header class="modal-header">
+          <h3>Reglas de La Generala</h3>
+          <button type="button" class="modal-close-btn" id="rules-close">✕</button>
+        </header>
+        <div class="rules-modal-body">
+          <div class="rule-card">
+            <h4>🔢 Números (1 al 6)</h4>
+            <p>Se suma el valor de los dados que coinciden con el número elegido. Máximo 5 dados.</p>
+          </div>
+          <div class="rule-card">
+            <h4>📐 Escalera</h4>
+            <p>Secuencia (1-2-3-4-5, 2-3-4-5-6 o 1-3-4-5-6).<br>
+            <strong>20 puntos</strong> armada / <strong>25 puntos</strong> servida (en el 1er tiro).</p>
+          </div>
+          <div class="rule-card">
+            <h4>🏠 Full</h4>
+            <p>3 dados de un número y 2 de otro.<br>
+            <strong>30 puntos</strong> armado / <strong>35 puntos</strong> servido.</p>
+          </div>
+          <div class="rule-card">
+            <h4>♦️ Poker</h4>
+            <p>4 dados iguales.<br>
+            <strong>40 puntos</strong> armado / <strong>45 puntos</strong> servido.</p>
+          </div>
+          <div class="rule-card">
+            <h4>👑 Generala</h4>
+            <p>5 dados iguales.<br>
+            <strong>50 puntos</strong> armada / <strong>Servida:</strong> Gana la partida (o 60 pts).</p>
+          </div>
+          <div class="rule-card">
+            <h4>👑👑 Doble Generala</h4>
+            <p>Segunda generala en la partida.<br>
+            <strong>100 puntos</strong> armada / <strong>120 puntos</strong> servida.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFETTI CANVAS -->
+    <canvas id="confetti-canvas"></canvas>
+
+  </div>
+
+  <!-- JAVASCRIPT EMBEBIDO DIRECTAMENTE -->
+  <script>
+/**
+ * ============================================================================
+ * TANTEADOR DE GENERALA - OFFICIAL APP LOGIC
+ * ============================================================================
+ */
+
+(function () {
+  'use strict';
+
+  // --- SOUND EFFECTS (Web Audio API - No external assets required) ---
+  class SoundEffects {
+    constructor() {
+      this.ctx = null;
+      this.enabled = true;
+    }
+
+    init() {
+      if (!this.ctx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          this.ctx = new AudioContext();
+        }
+      }
+    }
+
+    playTone(freq, type, duration, startVol = 0.1) {
+      if (!this.enabled) return;
+      try {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(startVol, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      } catch (e) {
+        console.warn('Audio error:', e);
+      }
+    }
+
+    playClick() {
+      this.playTone(600, 'sine', 0.08, 0.08);
+    }
+
+    playScore() {
+      if (!this.enabled) return;
+      this.playTone(523.25, 'triangle', 0.12, 0.12); // C5
+      setTimeout(() => this.playTone(659.25, 'triangle', 0.16, 0.12), 80); // E5
+    }
+
+    playScratch() {
+      this.playTone(180, 'sawtooth', 0.2, 0.1);
+    }
+
+    playWin() {
+      if (!this.enabled) return;
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C - E - G - C
+      notes.forEach((note, idx) => {
+        setTimeout(() => this.playTone(note, 'triangle', 0.35, 0.18), idx * 110);
+      });
+    }
+  }
+
+  const sound = new SoundEffects();
+
+  // --- PLAYER COLORS ---
+  const PLAYER_COLORS = [
+    '#10b981', // 1: Emerald
+    '#f59e0b', // 2: Amber
+    '#3b82f6', // 3: Sapphire
+    '#ec4899', // 4: Pink
+    '#8b5cf6', // 5: Amethyst
+    '#06b6d4', // 6: Cyan
+    '#f97316', // 7: Coral
+    '#a855f7'  // 8: Purple
+  ];
+
+  // --- GENERALA CATEGORIES DEFINITION ---
+  const CATEGORIES = [
+    { id: '1', name: 'Ases (1)', icon: '⚀', type: 'number', diceValue: 1 },
+    { id: '2', name: 'Doses (2)', icon: '⚁', type: 'number', diceValue: 2 },
+    { id: '3', name: 'Treses (3)', icon: '⚂', type: 'number', diceValue: 3 },
+    { id: '4', name: 'Cuatros (4)', icon: '⚃', type: 'number', diceValue: 4 },
+    { id: '5', name: 'Cincos (5)', icon: '⚄', type: 'number', diceValue: 5 },
+    { id: '6', name: 'Seises (6)', icon: '⚅', type: 'number', diceValue: 6 },
+    { id: 'E', name: 'Escalera', icon: '📐', type: 'major', armada: 20, servida: 25 },
+    { id: 'F', name: 'Full', icon: '🏠', type: 'major', armada: 30, servida: 35 },
+    { id: 'P', name: 'Poker', icon: '♦️', type: 'major', armada: 40, servida: 45 },
+    { id: 'G', name: 'Generala', icon: '👑', type: 'generala', armada: 50 },
+    { id: 'DG', name: 'Doble Gen.', icon: '👑👑', type: 'major', armada: 100, servida: 120, optional: true }
+  ];
+
+  const STORAGE_KEY = 'tanteador_generala_state_v1';
+
+  // --- GAME STATE ---
+  let state = {
+    players: [],
+    rules: {
+      dobleGenerala: true,
+      generalaServida: 'win', // 'win' or '60'
+      sound: true
+    },
+    orderMode: 'sequence', // 'sequence' or 'random'
+    activePlayerIndex: 0,
+    currentRound: 1,
+    scores: {}, // format: { [playerId]: { [catId]: { score: number, isScratched: boolean, isServida: boolean } } }
+    history: [], // For undo
+    isGameOver: false,
+    winnerPlayerId: null,
+    viewMode: 'table' // 'table' or 'focus'
+  };
+
+  // Helper: Active categories according to rules
+  function getActiveCategories() {
+    return CATEGORIES.filter(cat => !cat.optional || state.rules.dobleGenerala);
+  }
+
+  // --- DOM ELEMENTS ---
+  const screens = {
+    setup: document.getElementById('setup-screen'),
+    game: document.getElementById('game-screen')
+  };
+
+  const setupInputs = {
+    countSelector: document.getElementById('player-count-selector'),
+    countBadge: document.getElementById('player-count-badge'),
+    playersList: document.getElementById('players-input-list'),
+    orderSequenceBtn: document.getElementById('order-btn-sequence'),
+    orderRandomBtn: document.getElementById('order-btn-random'),
+    ruleDobleGen: document.getElementById('rule-doble-generala'),
+    ruleGenServida: document.getElementById('rule-generala-servida-mode'),
+    ruleGenServidaDesc: document.getElementById('generala-servida-desc'),
+    ruleSound: document.getElementById('rule-sound'),
+    btnStart: document.getElementById('btn-start-game'),
+    btnResume: document.getElementById('btn-resume-game')
+  };
+
+  const gameUI = {
+    roundText: document.getElementById('current-round-text'),
+    turnAvatar: document.getElementById('current-turn-avatar'),
+    turnName: document.getElementById('current-turn-name'),
+    btnUndo: document.getElementById('btn-undo'),
+    btnToggleView: document.getElementById('btn-toggle-view'),
+    viewIcon: document.getElementById('view-icon'),
+    viewName: document.getElementById('view-name'),
+    btnMenuSetup: document.getElementById('btn-menu-setup'),
+    leaderboardStrip: document.getElementById('leaderboard-strip'),
+    viewTable: document.getElementById('view-table'),
+    tableHeadRow: document.getElementById('table-head-row'),
+    tableBody: document.getElementById('table-body'),
+    tableTotalRow: document.getElementById('table-total-row'),
+    tableRankRow: document.getElementById('table-rank-row'),
+    viewFocus: document.getElementById('view-focus'),
+    focusNum: document.getElementById('focus-num'),
+    focusName: document.getElementById('focus-name'),
+    focusTotalScore: document.getElementById('focus-total-score'),
+    focusPrev: document.getElementById('focus-prev'),
+    focusNext: document.getElementById('focus-next'),
+    focusCategoriesGrid: document.getElementById('focus-categories-grid'),
+    btnQuickRules: document.getElementById('btn-quick-rules'),
+    btnFinishCheck: document.getElementById('btn-finish-check'),
+    btnNewGameFooter: document.getElementById('btn-new-game-footer')
+  };
+
+  const modalScore = {
+    backdrop: document.getElementById('score-modal'),
+    catIcon: document.getElementById('modal-cat-icon'),
+    catName: document.getElementById('modal-cat-name'),
+    playerSub: document.getElementById('modal-player-sub'),
+    optionsContainer: document.getElementById('modal-options-container'),
+    btnScratch: document.getElementById('modal-btn-scratch'),
+    btnClose: document.getElementById('modal-close')
+  };
+
+  const modalPodium = {
+    backdrop: document.getElementById('podium-modal'),
+    title: document.getElementById('podium-title'),
+    subtitle: document.getElementById('podium-subtitle'),
+    stage: document.getElementById('podium-stage'),
+    tbody: document.getElementById('podium-tbody'),
+    btnRematch: document.getElementById('btn-rematch'),
+    btnNewSetup: document.getElementById('btn-new-setup'),
+    btnClose: document.getElementById('btn-close-podium')
+  };
+
+  const modalRules = {
+    backdrop: document.getElementById('rules-modal'),
+    btnClose: document.getElementById('rules-close')
+  };
+
+  let modalActiveContext = null; // { playerId, catId }
+
+  // --- LOCAL STORAGE PERSISTENCE ---
+  function saveStateToStorage() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.error('Failed to save to local storage', e);
+    }
+  }
+
+  function loadStateFromStorage() {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        return JSON.parse(data);
+      }
+    } catch (e) {
+      console.error('Failed to parse state from storage', e);
+    }
+    return null;
+  }
+
+  function checkSavedGame() {
+    const saved = loadStateFromStorage();
+    if (saved && saved.players && saved.players.length > 0 && !saved.isGameOver) {
+      setupInputs.btnResume.style.display = 'block';
+    } else {
+      setupInputs.btnResume.style.display = 'none';
+    }
+  }
+
+  // --- SETUP SCREEN LOGIC ---
+  let tempPlayerCount = 2;
+  let tempAliases = {};
+
+  function renderSetupPlayers() {
+    setupInputs.playersList.innerHTML = '';
+    setupInputs.countBadge.textContent = `${tempPlayerCount} ${tempPlayerCount === 1 ? 'Jugador' : 'Jugadores'}`;
+
+    for (let i = 1; i <= tempPlayerCount; i++) {
+      const row = document.createElement('div');
+      row.className = 'player-input-row';
+      const color = PLAYER_COLORS[(i - 1) % PLAYER_COLORS.length];
+      const defaultAlias = tempAliases[i] !== undefined ? tempAliases[i] : `Jugador ${i}`;
+
+      row.innerHTML = `
+        <div class="player-row-avatar" style="background-color: ${color}">${i}</div>
+        <input type="text" class="player-alias-input" data-index="${i}" value="${escapeHtml(defaultAlias)}" placeholder="Alias para Jugador ${i}" maxlength="18">
+        <span class="player-order-badge">#${i}</span>
+      `;
+
+      const input = row.querySelector('.player-alias-input');
+      input.addEventListener('input', (e) => {
+        tempAliases[i] = e.target.value.trim();
+      });
+
+      setupInputs.playersList.appendChild(row);
+    }
+  }
+
+  function setupEventListeners() {
+    // Count selector buttons
+    setupInputs.countSelector.addEventListener('click', (e) => {
+      const btn = e.target.closest('.pill-btn');
+      if (!btn) return;
+      sound.playClick();
+      setupInputs.countSelector.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tempPlayerCount = parseInt(btn.dataset.count, 10);
+      renderSetupPlayers();
+    });
+
+    // Order buttons
+    setupInputs.orderSequenceBtn.addEventListener('click', () => {
+      sound.playClick();
+      setupInputs.orderSequenceBtn.classList.add('active');
+      setupInputs.orderRandomBtn.classList.remove('active');
+      state.orderMode = 'sequence';
+    });
+
+    setupInputs.orderRandomBtn.addEventListener('click', () => {
+      sound.playClick();
+      setupInputs.orderRandomBtn.classList.add('active');
+      setupInputs.orderSequenceBtn.classList.remove('active');
+      state.orderMode = 'random';
+    });
+
+    // Rule change listeners
+    setupInputs.ruleGenServida.addEventListener('change', (e) => {
+      if (e.target.value === 'win') {
+        setupInputs.ruleGenServidaDesc.textContent = 'Gana la partida automáticamente';
+      } else {
+        setupInputs.ruleGenServidaDesc.textContent = 'Otorga 60 puntos';
+      }
+    });
+
+    setupInputs.ruleSound.addEventListener('change', (e) => {
+      sound.enabled = e.target.checked;
+    });
+
+    // Start Game Button
+    setupInputs.btnStart.addEventListener('click', () => {
+      startNewGameFromSetup();
+    });
+
+    // Resume Game Button
+    setupInputs.btnResume.addEventListener('click', () => {
+      const saved = loadStateFromStorage();
+      if (saved) {
+        sound.playClick();
+        state = saved;
+        sound.enabled = state.rules.sound;
+        showScreen('game');
+        renderGame();
+      }
+    });
+
+    // Header actions
+    gameUI.btnUndo.addEventListener('click', handleUndo);
+    gameUI.btnToggleView.addEventListener('click', toggleViewMode);
+    gameUI.btnMenuSetup.addEventListener('click', confirmExitToSetup);
+
+    // Focus nav
+    gameUI.focusPrev.addEventListener('click', () => {
+      sound.playClick();
+      state.activePlayerIndex = (state.activePlayerIndex - 1 + state.players.length) % state.players.length;
+      renderGame();
+    });
+
+    gameUI.focusNext.addEventListener('click', () => {
+      sound.playClick();
+      state.activePlayerIndex = (state.activePlayerIndex + 1) % state.players.length;
+      renderGame();
+    });
+
+    // Footer actions
+    gameUI.btnQuickRules.addEventListener('click', () => {
+      sound.playClick();
+      modalRules.backdrop.classList.add('open');
+    });
+
+    modalRules.btnClose.addEventListener('click', () => {
+      modalRules.backdrop.classList.remove('open');
+    });
+
+    gameUI.btnFinishCheck.addEventListener('click', () => {
+      sound.playClick();
+      showPodium(false);
+    });
+
+    gameUI.btnNewGameFooter.addEventListener('click', confirmExitToSetup);
+
+    // Score Modal Close
+    modalScore.btnClose.addEventListener('click', closeScoreModal);
+    modalScore.backdrop.addEventListener('click', (e) => {
+      if (e.target === modalScore.backdrop) closeScoreModal();
+    });
+
+    // Podium Actions
+    modalPodium.btnRematch.addEventListener('click', handleRematch);
+    modalPodium.btnNewSetup.addEventListener('click', () => {
+      modalPodium.backdrop.classList.remove('open');
+      showScreen('setup');
+      checkSavedGame();
+    });
+    modalPodium.btnClose.addEventListener('click', () => {
+      modalPodium.backdrop.classList.remove('open');
+    });
+  }
+
+  // --- GAME INITIALIZATION ---
+  function startNewGameFromSetup() {
+    sound.playScore();
+
+    // Read players list
+    const playerInputs = setupInputs.playersList.querySelectorAll('.player-alias-input');
+    let players = [];
+
+    playerInputs.forEach((input, idx) => {
+      const playerNum = idx + 1;
+      const alias = input.value.trim() || `Jugador ${playerNum}`;
+      players.push({
+        id: `p_${playerNum}`,
+        playerNumber: playerNum,
+        alias: alias,
+        color: PLAYER_COLORS[idx % PLAYER_COLORS.length]
+      });
+    });
+
+    // Handle Turn Order: Random or Sequence
+    const orderMode = setupInputs.orderRandomBtn.classList.contains('active') ? 'random' : 'sequence';
+    if (orderMode === 'random') {
+      // Shuffle array (Fisher-Yates)
+      for (let i = players.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [players[i], players[j]] = [players[j], players[i]];
+      }
+    }
+
+    // Rules
+    const rules = {
+      dobleGenerala: setupInputs.ruleDobleGen.checked,
+      generalaServida: setupInputs.ruleGenServida.value,
+      sound: setupInputs.ruleSound.checked
+    };
+
+    sound.enabled = rules.sound;
+
+    // Initialize state
+    state = {
+      players: players,
+      rules: rules,
+      orderMode: orderMode,
+      activePlayerIndex: 0,
+      currentRound: 1,
+      scores: {},
+      history: [],
+      isGameOver: false,
+      winnerPlayerId: null,
+      viewMode: 'table'
+    };
+
+    // Init score table
+    players.forEach(p => {
+      state.scores[p.id] = {};
+    });
+
+    saveStateToStorage();
+    showScreen('game');
+    renderGame();
+  }
+
+  function handleRematch() {
+    sound.playClick();
+    modalPodium.backdrop.classList.remove('open');
+
+    // Keep same players and rules, re-shuffle if mode was random
+    let players = [...state.players];
+    if (state.orderMode === 'random') {
+      for (let i = players.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [players[i], players[j]] = [players[j], players[i]];
+      }
+    }
+
+    state.players = players;
+    state.activePlayerIndex = 0;
+    state.currentRound = 1;
+    state.scores = {};
+    state.history = [];
+    state.isGameOver = false;
+    state.winnerPlayerId = null;
+
+    players.forEach(p => {
+      state.scores[p.id] = {};
+    });
+
+    saveStateToStorage();
+    renderGame();
+  }
+
+  function confirmExitToSetup() {
+    if (confirm('¿Deseas volver a la pantalla de configuración? La partida actual quedará guardada.')) {
+      sound.playClick();
+      showScreen('setup');
+      checkSavedGame();
+    }
+  }
+
+  // --- SCREEN SWITCHING ---
+  function showScreen(name) {
+    if (name === 'setup') {
+      screens.setup.classList.add('active');
+      screens.game.classList.remove('active');
+    } else {
+      screens.setup.classList.remove('active');
+      screens.game.classList.add('active');
+    }
+  }
+
+  // --- CALCULATIONS & STATS ---
+  function getPlayerTotal(playerId) {
+    const pScores = state.scores[playerId] || {};
+    let total = 0;
+    Object.values(pScores).forEach(entry => {
+      if (entry && typeof entry.score === 'number' && !entry.isScratched) {
+        total += entry.score;
+      }
+    });
+    return total;
+  }
+
+  function getPlayerFilledCount(playerId) {
+    const pScores = state.scores[playerId] || {};
+    return Object.keys(pScores).length;
+  }
+
+  function getPlayerRankings() {
+    const list = state.players.map(p => {
+      return {
+        player: p,
+        total: getPlayerTotal(p.id),
+        filled: getPlayerFilledCount(p.id)
+      };
+    });
+
+    // Sort descending by total score
+    list.sort((a, b) => b.total - a.total);
+
+    // Assign rank with tie breaker
+    let currentRank = 1;
+    for (let i = 0; i < list.length; i++) {
+      if (i > 0 && list[i].total < list[i - 1].total) {
+        currentRank = i + 1;
+      }
+      list[i].rank = currentRank;
+    }
+
+    return list;
+  }
+
+  function updateRoundAndTurn() {
+    const activeCats = getActiveCategories();
+    const totalRounds = activeCats.length;
+
+    // Calculate current round: minimum filled count across all players + 1
+    let minFilled = totalRounds;
+    state.players.forEach(p => {
+      const filled = getPlayerFilledCount(p.id);
+      if (filled < minFilled) minFilled = filled;
+    });
+
+    state.currentRound = Math.min(totalRounds, minFilled + 1);
+    gameUI.roundText.textContent = `${state.currentRound}/${totalRounds}`;
+
+    // Active player UI
+    const activePlayer = state.players[state.activePlayerIndex];
+    if (activePlayer) {
+      gameUI.turnAvatar.textContent = activePlayer.playerNumber;
+      gameUI.turnAvatar.style.backgroundColor = activePlayer.color;
+      gameUI.turnName.textContent = activePlayer.alias;
+    }
+
+    // Undo button state
+    gameUI.btnUndo.disabled = state.history.length === 0;
+  }
+
+  // --- RENDERING ---
+  function renderGame() {
+    updateRoundAndTurn();
+    renderLeaderboard();
+    if (state.viewMode === 'table') {
+      renderTableScorecard();
+    } else {
+      renderFocusView();
+    }
+  }
+
+  function renderLeaderboard() {
+    const rankings = getPlayerRankings();
+    gameUI.leaderboardStrip.innerHTML = '';
+
+    rankings.forEach(item => {
+      const chip = document.createElement('div');
+      chip.className = `rank-chip ${item.rank === 1 ? 'leader' : ''}`;
+      const medal = item.rank === 1 ? '👑 ' : `${item.rank}° `;
+
+      chip.innerHTML = `
+        <span class="rank-chip-avatar" style="background-color: ${item.player.color}">${item.player.playerNumber}</span>
+        <span class="rank-chip-name">${medal}${escapeHtml(item.player.alias)}</span>
+        <span class="rank-chip-score">${item.total} pts</span>
+      `;
+      gameUI.leaderboardStrip.appendChild(chip);
+    });
+  }
+
+  // Render Table View (Scorecard)
+  function renderTableScorecard() {
+    const activeCats = getActiveCategories();
+    const rankings = getPlayerRankings();
+    const rankMap = {};
+    rankings.forEach(r => { rankMap[r.player.id] = r.rank; });
+
+    // Table Header
+    gameUI.tableHeadRow.innerHTML = '<th class="sticky-col category-col">Juego</th>';
+    state.players.forEach((p, idx) => {
+      const isTurn = idx === state.activePlayerIndex;
+      const th = document.createElement('th');
+      th.className = `player-col-header ${isTurn ? 'is-turn' : ''}`;
+      th.innerHTML = `
+        <div class="p-header-content">
+          <div class="p-header-avatar" style="background-color: ${p.color}">${p.playerNumber}</div>
+          <span class="p-header-name" title="${escapeHtml(p.alias)}">${escapeHtml(p.alias)}</span>
+          ${isTurn ? '<span class="p-header-turn-tag">TURNO</span>' : ''}
+        </div>
+      `;
+      th.addEventListener('click', () => {
+        sound.playClick();
+        state.activePlayerIndex = idx;
+        renderGame();
+      });
+      gameUI.tableHeadRow.appendChild(th);
+    });
+
+    // Table Body (Categories)
+    gameUI.tableBody.innerHTML = '';
+    activeCats.forEach(cat => {
+      const tr = document.createElement('tr');
+
+      // Category label cell
+      const tdLabel = document.createElement('td');
+      tdLabel.className = 'sticky-col category-col';
+      tdLabel.innerHTML = `<span class="cat-icon">${cat.icon}</span> <span>${cat.name}</span>`;
+      tr.appendChild(tdLabel);
+
+      // Score cells for each player
+      state.players.forEach((p, pIdx) => {
+        const td = document.createElement('td');
+        const isTurn = pIdx === state.activePlayerIndex;
+        const entry = state.scores[p.id] ? state.scores[p.id][cat.id] : null;
+
+        td.className = 'score-cell';
+        if (isTurn) td.classList.add('active-col');
+        if (isTurn && !entry) td.classList.add('highlight-turn');
+
+        if (!entry) {
+          td.classList.add('empty');
+          td.textContent = '-';
+        } else if (entry.isScratched) {
+          td.classList.add('scratched');
+          td.textContent = '✕';
+        } else {
+          if (entry.isServida) td.classList.add('servida');
+          else td.classList.add('armada');
+          td.textContent = entry.score;
+        }
+
+        td.addEventListener('click', () => {
+          openScoreModal(p.id, cat.id);
+        });
+
+        tr.appendChild(td);
+      });
+
+      gameUI.tableBody.appendChild(tr);
+    });
+
+    // Table Footer - Totals
+    gameUI.tableTotalRow.innerHTML = '<th class="sticky-col category-col">TOTAL</th>';
+    state.players.forEach((p) => {
+      const th = document.createElement('td');
+      th.textContent = getPlayerTotal(p.id);
+      gameUI.tableTotalRow.appendChild(th);
+    });
+
+    // Table Footer - Rankings
+    gameUI.tableRankRow.innerHTML = '<th class="sticky-col category-col">PUESTO</th>';
+    state.players.forEach((p) => {
+      const td = document.createElement('td');
+      const rank = rankMap[p.id];
+      if (rank === 1) {
+        td.innerHTML = `<span class="rank-badge-leader">👑 1°</span>`;
+      } else {
+        td.textContent = `${rank}°`;
+      }
+      gameUI.tableRankRow.appendChild(td);
+    });
+  }
+
+  // Render Focus View (Single Player)
+  function renderFocusView() {
+    const activePlayer = state.players[state.activePlayerIndex];
+    if (!activePlayer) return;
+
+    gameUI.focusNum.textContent = activePlayer.playerNumber;
+    gameUI.focusNum.style.backgroundColor = activePlayer.color;
+    gameUI.focusName.textContent = activePlayer.alias;
+    gameUI.focusTotalScore.textContent = `Total: ${getPlayerTotal(activePlayer.id)} pts`;
+
+    const activeCats = getActiveCategories();
+    gameUI.focusCategoriesGrid.innerHTML = '';
+
+    activeCats.forEach(cat => {
+      const entry = state.scores[activePlayer.id] ? state.scores[activePlayer.id][cat.id] : null;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'focus-cat-btn';
+
+      let valDisplay = '<span class="focus-cat-value empty">Anotar</span>';
+      if (entry) {
+        btn.classList.add('filled');
+        if (entry.isScratched) {
+          btn.classList.add('scratched');
+          valDisplay = '<span class="focus-cat-value scratched">0 (Tachada)</span>';
+        } else {
+          const servStar = entry.isServida ? ' ★ Servida' : '';
+          valDisplay = `<span class="focus-cat-value">${entry.score}${servStar}</span>`;
+        }
+      }
+
+      btn.innerHTML = `
+        <div class="focus-cat-info">
+          <span class="focus-cat-icon">${cat.icon}</span>
+          <span class="focus-cat-title">${cat.name}</span>
+        </div>
+        ${valDisplay}
+      `;
+
+      btn.addEventListener('click', () => {
+        openScoreModal(activePlayer.id, cat.id);
+      });
+
+      gameUI.focusCategoriesGrid.appendChild(btn);
+    });
+  }
+
+  // View Mode Toggle
+  function toggleViewMode() {
+    sound.playClick();
+    if (state.viewMode === 'table') {
+      state.viewMode = 'focus';
+      gameUI.viewTable.classList.remove('active');
+      gameUI.viewFocus.classList.add('active');
+      gameUI.viewIcon.textContent = '📋';
+      gameUI.viewName.textContent = 'Planilla';
+    } else {
+      state.viewMode = 'table';
+      gameUI.viewFocus.classList.remove('active');
+      gameUI.viewTable.classList.add('active');
+      gameUI.viewIcon.textContent = '📱';
+      gameUI.viewName.textContent = 'Modo Foco';
+    }
+    renderGame();
+    saveStateToStorage();
+  }
+
+  // --- SCORE SELECTION MODAL ---
+  function openScoreModal(playerId, catId) {
+    sound.playClick();
+    const player = state.players.find(p => p.id === playerId);
+    const cat = CATEGORIES.find(c => c.id === catId);
+    if (!player || !cat) return;
+
+    modalActiveContext = { playerId, catId };
+    modalScore.catIcon.textContent = cat.icon;
+    modalScore.catName.textContent = cat.name;
+    modalScore.playerSub.textContent = `Anotando para ${player.alias} (#${player.playerNumber})`;
+
+    modalScore.optionsContainer.innerHTML = '';
+
+    if (cat.type === 'number') {
+      // 1 to 5 dice for numbers
+      const grid = document.createElement('div');
+      grid.className = 'dice-options-grid';
+
+      for (let diceCount = 1; diceCount <= 5; diceCount++) {
+        const score = diceCount * cat.diceValue;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'dice-opt-btn';
+
+        // Render dice icons
+        const diceGlyphs = Array(diceCount).fill(cat.icon).join('');
+
+        btn.innerHTML = `
+          <span class="dice-opt-visual">${diceGlyphs}</span>
+          <span class="dice-opt-label">${diceCount} ${diceCount === 1 ? 'dado' : 'dados'}</span>
+          <span class="dice-opt-score">${score}</span>
+        `;
+
+        btn.addEventListener('click', () => {
+          submitScore(playerId, catId, score, false, false);
+        });
+
+        grid.appendChild(btn);
+      }
+
+      modalScore.optionsContainer.appendChild(grid);
+
+    } else if (cat.type === 'major') {
+      // Major category (Escalera, Full, Poker, Doble Generala)
+      const stack = document.createElement('div');
+      stack.className = 'major-options-stack';
+
+      // Servida option
+      const btnServida = document.createElement('button');
+      btnServida.type = 'button';
+      btnServida.className = 'major-opt-btn';
+      btnServida.innerHTML = `
+        <div class="major-opt-title">
+          <strong>★ Servida</strong>
+          <span>En el primer tiro de los dados</span>
+        </div>
+        <span class="major-opt-score">${cat.servida} pts</span>
+      `;
+      btnServida.addEventListener('click', () => {
+        submitScore(playerId, catId, cat.servida, false, true);
+      });
+      stack.appendChild(btnServida);
+
+      // Armada option
+      const btnArmada = document.createElement('button');
+      btnArmada.type = 'button';
+      btnArmada.className = 'major-opt-btn';
+      btnArmada.innerHTML = `
+        <div class="major-opt-title">
+          <strong>Armada</strong>
+          <span>En el segundo o tercer tiro</span>
+        </div>
+        <span class="major-opt-score">${cat.armada} pts</span>
+      `;
+      btnArmada.addEventListener('click', () => {
+        submitScore(playerId, catId, cat.armada, false, false);
+      });
+      stack.appendChild(btnArmada);
+
+      modalScore.optionsContainer.appendChild(stack);
+
+    } else if (cat.type === 'generala') {
+      // Generala simple
+      const stack = document.createElement('div');
+      stack.className = 'major-options-stack';
+
+      // Servida
+      const btnServida = document.createElement('button');
+      btnServida.type = 'button';
+      btnServida.className = 'major-opt-btn';
+      const isWinRule = state.rules.generalaServida === 'win';
+      btnServida.innerHTML = `
+        <div class="major-opt-title">
+          <strong>👑 ¡Generala Servida!</strong>
+          <span>${isWinRule ? '¡Gana la partida directamente!' : 'En el primer tiro'}</span>
+        </div>
+        <span class="major-opt-score">${isWinRule ? 'VICTORIA' : '60 pts'}</span>
+      `;
+      btnServida.addEventListener('click', () => {
+        if (isWinRule) {
+          handleGeneralaServidaInstantWin(playerId);
+        } else {
+          submitScore(playerId, catId, 60, false, true);
+        }
+      });
+      stack.appendChild(btnServida);
+
+      // Armada
+      const btnArmada = document.createElement('button');
+      btnArmada.type = 'button';
+      btnArmada.className = 'major-opt-btn';
+      btnArmada.innerHTML = `
+        <div class="major-opt-title">
+          <strong>Generala Armada</strong>
+          <span>En el segundo o tercer tiro</span>
+        </div>
+        <span class="major-opt-score">${cat.armada} pts</span>
+      `;
+      btnArmada.addEventListener('click', () => {
+        submitScore(playerId, catId, cat.armada, false, false);
+      });
+      stack.appendChild(btnArmada);
+
+      modalScore.optionsContainer.appendChild(stack);
+    }
+
+    // Scratch button
+    modalScore.btnScratch.onclick = () => {
+      submitScore(playerId, catId, 0, true, false);
+    };
+
+    modalScore.backdrop.classList.add('open');
+  }
+
+  function closeScoreModal() {
+    modalScore.backdrop.classList.remove('open');
+    modalActiveContext = null;
+  }
+
+  function submitScore(playerId, catId, score, isScratched, isServida) {
+    if (isScratched) {
+      sound.playScratch();
+    } else {
+      sound.playScore();
+    }
+
+    // Record previous state for Undo
+    const previousEntry = state.scores[playerId] && state.scores[playerId][catId] ? { ...state.scores[playerId][catId] } : null;
+    const prevTurnIndex = state.activePlayerIndex;
+
+    state.history.push({
+      playerId,
+      catId,
+      previousEntry,
+      prevTurnIndex
+    });
+
+    // Save score
+    if (!state.scores[playerId]) state.scores[playerId] = {};
+    state.scores[playerId][catId] = {
+      score: isScratched ? 0 : score,
+      isScratched: !!isScratched,
+      isServida: !!isServida
+    };
+
+    // Auto-advance turn if score was entered for the player currently in turn
+    const currentPlayer = state.players[state.activePlayerIndex];
+    if (currentPlayer && currentPlayer.id === playerId) {
+      state.activePlayerIndex = (state.activePlayerIndex + 1) % state.players.length;
+    }
+
+    closeScoreModal();
+    saveStateToStorage();
+    renderGame();
+
+    // Check game completion
+    checkGameFinished();
+  }
+
+  // --- UNDO FUNCTIONALITY ---
+  function handleUndo() {
+    if (state.history.length === 0) return;
+    sound.playClick();
+
+    const lastAction = state.history.pop();
+    if (lastAction.previousEntry) {
+      state.scores[lastAction.playerId][lastAction.catId] = lastAction.previousEntry;
+    } else {
+      delete state.scores[lastAction.playerId][lastAction.catId];
+    }
+
+    state.activePlayerIndex = lastAction.prevTurnIndex;
+    state.isGameOver = false;
+    state.winnerPlayerId = null;
+
+    saveStateToStorage();
+    renderGame();
+  }
+
+  // --- GENERALA SERVIDA INSTANT WIN ---
+  function handleGeneralaServidaInstantWin(playerId) {
+    sound.playWin();
+    closeScoreModal();
+
+    if (!state.scores[playerId]) state.scores[playerId] = {};
+    state.scores[playerId]['G'] = {
+      score: 100, // Grand bonus
+      isScratched: false,
+      isServida: true
+    };
+
+    state.isGameOver = true;
+    state.winnerPlayerId = playerId;
+    saveStateToStorage();
+    renderGame();
+
+    showPodium(true, playerId);
+  }
+
+  // --- GAME FINISH CHECK & PODIUM ---
+  function checkGameFinished() {
+    const activeCats = getActiveCategories();
+    const totalSlots = activeCats.length;
+
+    let allCompleted = true;
+    for (const p of state.players) {
+      const filled = getPlayerFilledCount(p.id);
+      if (filled < totalSlots) {
+        allCompleted = false;
+        break;
+      }
+    }
+
+    if (allCompleted) {
+      state.isGameOver = true;
+      saveStateToStorage();
+      sound.playWin();
+      showPodium(false);
+    }
+  }
+
+  function showPodium(isGeneralaServidaWin = false, servidaWinnerId = null) {
+    const rankings = getPlayerRankings();
+    let winner = rankings[0];
+
+    if (isGeneralaServidaWin && servidaWinnerId) {
+      winner = rankings.find(r => r.player.id === servidaWinnerId) || winner;
+      modalPodium.title.textContent = '¡GENERALA SERVIDA!';
+      modalPodium.subtitle.textContent = `¡${winner.player.alias} ganó la partida instantáneamente en su primer tiro!`;
+    } else {
+      modalPodium.title.textContent = '¡Fin de la Partida!';
+      modalPodium.subtitle.textContent = `¡Felicitaciones ${winner.player.alias}, campeón indiscutido!`;
+    }
+
+    // Render 3D Podium Pillars
+    modalPodium.stage.innerHTML = '';
+
+    // First, Second, Third places
+    const first = rankings[0];
+    const second = rankings.length > 1 ? rankings[1] : null;
+    const third = rankings.length > 2 ? rankings[2] : null;
+
+    // 2nd Pillar
+    if (second) {
+      const p2 = document.createElement('div');
+      p2.className = 'podium-pillar pillar-2';
+      p2.innerHTML = `
+        <span class="podium-rank-tag">🥈</span>
+        <span class="podium-player-name">${escapeHtml(second.player.alias)}</span>
+        <span class="podium-player-pts">${second.total}</span>
+      `;
+      modalPodium.stage.appendChild(p2);
+    }
+
+    // 1st Pillar
+    if (first) {
+      const p1 = document.createElement('div');
+      p1.className = 'podium-pillar pillar-1';
+      p1.innerHTML = `
+        <span class="podium-rank-tag">👑 🥇</span>
+        <span class="podium-player-name">${escapeHtml(first.player.alias)}</span>
+        <span class="podium-player-pts">${first.total}</span>
+      `;
+      modalPodium.stage.appendChild(p1);
+    }
+
+    // 3rd Pillar
+    if (third) {
+      const p3 = document.createElement('div');
+      p3.className = 'podium-pillar pillar-3';
+      p3.innerHTML = `
+        <span class="podium-rank-tag">🥉</span>
+        <span class="podium-player-name">${escapeHtml(third.player.alias)}</span>
+        <span class="podium-player-pts">${third.total}</span>
+      `;
+      modalPodium.stage.appendChild(p3);
+    }
+
+    // Render Full Ranking Table
+    modalPodium.tbody.innerHTML = '';
+    rankings.forEach(item => {
+      const tr = document.createElement('tr');
+      const maxPossible = getActiveCategories().length;
+      const efficiency = `${Math.round((item.filled / maxPossible) * 100)}%`;
+
+      tr.innerHTML = `
+        <td><strong>${item.rank === 1 ? '👑 1°' : `${item.rank}°`}</strong></td>
+        <td>
+          <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${item.player.color};margin-right:6px;"></span>
+          ${escapeHtml(item.player.alias)}
+        </td>
+        <td><strong>${item.total} pts</strong></td>
+        <td>${item.filled}/${maxPossible} (${efficiency})</td>
+      `;
+      modalPodium.tbody.appendChild(tr);
+    });
+
+    modalPodium.backdrop.classList.add('open');
+    launchConfetti();
+  }
+
+  // --- CONFETTI CANNON ---
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const pieces = [];
+    const colors = ['#e5c158', '#f6d878', '#10b981', '#3b82f6', '#ec4899', '#f97316', '#ffffff'];
+
+    for (let i = 0; i < 120; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        size: Math.random() * 8 + 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        velX: (Math.random() - 0.5) * 3,
+        velY: Math.random() * 4 + 3,
+        rotation: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 6
+      });
+    }
+
+    let animationFrame;
+    let frameCount = 0;
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.x += p.velX;
+        p.y += p.velY;
+        p.rotation += p.rotSpeed;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+        ctx.restore();
+
+        if (p.y > canvas.height) {
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+      });
+
+      frameCount++;
+      if (frameCount < 240) {
+        animationFrame = requestAnimationFrame(render);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        cancelAnimationFrame(animationFrame);
+      }
+    }
+
+    render();
+  }
+
+  // Escape HTML helper
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // --- INITIALIZATION ---
+  function init() {
+    setupEventListeners();
+    renderSetupPlayers();
+    checkSavedGame();
+  }
+
+  // Run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+  </script>
+</body>
+</html>
