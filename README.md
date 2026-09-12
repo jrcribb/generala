@@ -1,6 +1,14 @@
-# Tanteador de Generala
+# Generala
 
-Aplicación web para llevar la cuenta de partidas de Generala de forma rápida, visual y cómoda. Está diseñada para jugar de 1 a 8 personas, con opciones para personalizar nombres, controlar el orden de turno, aplicar reglas del juego y guardar automáticamente la partida.
+Aplicación web para tirar dados y llevar la cuenta de partidas de Generala. Está diseñada para jugar de 1 a 8 personas, con opciones para personalizar nombres, controlar el orden de turno, aplicar reglas del juego y guardar automáticamente la partida.
+
+## Modos
+
+1. **Juego:** cinco dados animados. Tocá los dados para fijarlos o soltarlos y tirá sólo los restantes, hasta tres veces por turno. El botón Nuevo turno reinicia los dados con confirmación.
+2. **Tanteador:** planilla manual para hasta ocho jugadores, usando dados físicos o resultados comunicados desde otros dispositivos.
+3. **Juego + Tanteador:** dados y planilla personal juntos, para anotar únicamente tus propios puntos. Confirmá cada turno con el cubilete para reiniciar los dados. El guardado es independiente del tanteador grupal.
+
+Los dispositivos funcionan de manera independiente: una persona registra manualmente los resultados. No hay sala ni sincronización automática.
 
 ## Descripción
 
@@ -76,7 +84,7 @@ http://localhost:8000/generala.html
 
 ## Uso
 
-1. En la pantalla de configuración, seleccioná la cantidad de jugadores.
+1. Elegí Juego, Tanteador o Juego + Tanteador. En Juego podés empezar a tirar directamente; para los otros modos, seleccioná la cantidad de jugadores.
 2. Editá los alias de cada jugador.
 3. Elegí el tipo de orden de turno.
 4. Configurá las reglas deseadas.
@@ -86,6 +94,8 @@ http://localhost:8000/generala.html
 
 ## Guardado
 
+Las tiradas guardan valores, dados fijos y cantidad de tiros. En Juego se guardan por separado de la planilla. Recargar durante la animación conserva el tiro realizado.
+
 La partida se guarda automáticamente en el navegador usando localStorage, por lo que si recargás la página o vuelves a abrir la app, podés continuar la partida guardada si aún no terminó.
 
 ## Estructura del proyecto
@@ -94,7 +104,7 @@ La partida se guarda automáticamente en el navegador usando localStorage, por l
 generala/
 ├── generala.html
 ├── README.md
-└── (otras configuraciones si se agregan en el futuro)
+└── tests/dice.test.cjs
 ```
 
 ## Nota
@@ -104,3 +114,7 @@ Esta aplicación está pensada como una herramienta de juego local y no incluye 
 ## Autor
 
 Proyecto desarrollado como tanteador web para partidas de Generala.
+
+## Pruebas
+
+Ejecutá `node --test tests/dice.test.cjs`. Cubren conservación de dados fijos, límite de tres tiros, bloqueo de dobles clics, separación de jugadores y guardado independiente.

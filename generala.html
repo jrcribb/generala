@@ -2,9 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tanteador de Generala | Anotador Oficial hasta 8 Jugadores</title>
-  <meta name="description" content="Tanteador digital para La Generala de 1 a 8 jugadores. Modo orden de carga o aleatorio, alias personalizables, reglas oficiales y guardado automático.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generala</title>
+  <meta name="description" content="Generala con tres modos: Juego, Tanteador y Juego + Tanteador. Cinco dados animados, hasta tres tiros y planilla para hasta ocho jugadores.">
   
   <!-- FAVICON EMBEBIDO (Dado Dorado y Esmeralda) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='22' fill='%230d2818' stroke='%23e5c158' stroke-width='6'/%3E%3Ccircle cx='28' cy='28' r='9' fill='%23f6d878'/%3E%3Ccircle cx='72' cy='28' r='9' fill='%23f6d878'/%3E%3Ccircle cx='50' cy='50' r='9' fill='%23f6d878'/%3E%3Ccircle cx='28' cy='72' r='9' fill='%23f6d878'/%3E%3Ccircle cx='72' cy='72' r='9' fill='%23f6d878'/%3E%3C/svg%3E">
@@ -1364,6 +1364,36 @@ thead tr th.sticky-col {
   color: #fff;
 }
 
+/* Personal score actions need clear, equally sized choices. */
+.score-modal-card .major-opt-btn,
+.score-modal-card .btn-scratch {
+  min-height: 64px;
+  box-sizing: border-box;
+}
+
+.personal-score-btn {
+  background: #f6d878;
+  border: 2px solid #fff0b8;
+  color: #152c20;
+  font-size: 1rem;
+  font-weight: 800;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 3px 0 #a8842a, 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.personal-score-btn:hover {
+  background: #fff0b8;
+  border-color: #fff8d5;
+  color: #102217;
+}
+
+.turn-score-card { width: min(100%, 360px); text-align: center; padding: 28px; }
+.turn-score-round { color: var(--text-muted); font-size: 0.85rem; font-weight: 800; letter-spacing: 0.12em; }
+.turn-score-category { margin: 12px 0 4px; font-size: 1.35rem; color: var(--text-main); }
+.turn-score-points { margin: 0 0 22px; color: var(--gold-bright); font: 800 2.6rem var(--font-mono); }
+.turn-score-card .btn-primary { width: 100%; min-height: 56px; }
+
 .scratch-x {
   font-size: 1.1rem;
   font-weight: 900;
@@ -1565,6 +1595,147 @@ thead tr th.sticky-col {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+[hidden] { display: none !important; }
+.mode-picker { border: 0; display: grid; gap: 10px; }
+.mode-picker legend { margin-bottom: 12px; }
+.mode-picker label { display: grid; grid-template-columns: 22px 1fr; gap: 3px 10px; border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; cursor: pointer; background: rgba(0,0,0,.2); }
+.mode-picker label:has(input:checked) { border-color: var(--gold-primary); background: rgba(229,193,88,.12); }
+.mode-picker input { grid-row: span 2; align-self: center; accent-color: var(--gold-primary); width: 18px; height: 18px; }
+.mode-picker span { font-size: 14px; color: var(--text-muted); }
+#dice-panel { padding: 22px; margin: 12px; }
+.dice-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.dice-heading h2 { font-size: 22px; }
+#dice-instruction { color: var(--text-muted); font-size: 16px; min-height: 44px; }
+.dice-tray { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 12px; max-width: 540px; margin: 24px auto; }
+.die { padding: 0; border: 0; background: transparent; color: var(--text-muted); cursor: pointer; touch-action: manipulation; }
+.die-face { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr); aspect-ratio: 1; padding: 15%; gap: 9%; border-radius: 18%; background: #f2eee0; border: 3px solid transparent; box-shadow: 0 5px 0 #b6ac8d, 0 10px 18px #0005; transition: transform .15s; }
+.die[data-rolled="false"] .die-face { background: #9ba3a0; box-shadow: 0 5px 0 #68716d, 0 10px 18px #0005; }
+.die[aria-pressed="true"] .die-face { border-color: var(--gold-bright); background: #f6d878; transform: translateY(-7px); box-shadow: 0 5px 0 #a8842a,0 0 20px #e5c15844; }
+.die-pip { border-radius: 50%; background: #152c20; visibility: hidden; }
+.die-pip.on { visibility: visible; }
+.die-label { display: block; margin-top: 14px; font: 600 14px var(--font-main); }
+.die[aria-pressed="true"] .die-label { color: var(--gold-bright); }
+.die.rolling .die-face { animation: tumble .18s linear infinite; }
+@keyframes tumble { 0% { transform: rotate(-12deg) translateY(-6px); } 50% { transform: rotate(12deg) translateY(3px); } 100% { transform: rotate(-12deg) translateY(-6px); } }
+.dice-actions { display: flex; gap: 12px; margin: 18px 0; flex-wrap: wrap; }
+.dice-actions .btn-primary { flex: 1; }
+.dice-actions button:disabled { opacity: .45; cursor: default; transform: none; }
+#dice-result { text-align: center; min-height: 24px; color: var(--gold-bright); font-size: 16px; }
+body[data-mode="play"] .round-indicator, body[data-mode="play"] #turn-banner, body[data-mode="play"] .header-right,
+body[data-mode="play"] #leaderboard-strip, body[data-mode="play"] .view-container, body[data-mode="play"] #btn-finish-check, body[data-mode="play"] #btn-new-game-footer { display: none !important; }
+body[data-mode="play"] #game-screen { max-width: 700px; margin: 0 auto; }
+body[data-mode="both"] .table-wrapper { max-height: none; }
+@media(max-width: 480px) { #dice-panel { padding: 16px 12px; } .dice-tray { gap: 8px; } .die-face { border-width: 2px; } .dice-actions .btn-primary { padding: 14px; } }
+@media(prefers-reduced-motion: reduce) { .die.rolling .die-face { animation: none; } }
+
+/* One-screen scoring surface: six numbers first, then special plays. */
+#game-screen.active { height: 100dvh; min-height: 0; padding: 0 0 env(safe-area-inset-bottom); gap: 8px; }
+.game-header { position: static; flex-shrink: 0; margin: 8px 12px 0; }
+.game-main { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.leaderboard-strip { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); overflow: visible; white-space: normal; padding: 0 12px; gap: 4px; flex-shrink: 0; }
+.rank-chip { min-width: 0; padding: 4px 6px; gap: 4px; font-size: 14px; }
+.rank-chip-name { flex: 1; min-width: 0; white-space: nowrap; }
+.rank-chip-score { white-space: nowrap; }
+.view-container.active { flex: 1; min-height: 0; display: flex; }
+.focus-player-card { width: 100%; max-width: 900px; padding: 12px; gap: 10px; min-height: 0; }
+.focus-header { flex-shrink: 0; padding-bottom: 8px; gap: 8px; }
+.focus-details { min-width: 0; }
+.focus-details h2 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.focus-player-badge { min-width: 0; }
+.focus-num, .focus-nav { flex-shrink: 0; }
+.focus-categories-grid { flex: 1; min-height: 0; grid-template-columns: repeat(3,minmax(0,1fr)); grid-template-rows: repeat(4,minmax(0,1fr)); gap: 8px; }
+.focus-cat-btn { min-width: 0; min-height: 0; padding: 6px 10px; flex-direction: column; justify-content: center; gap: 4px; }
+.focus-cat-icon { font-size: clamp(32px,6dvh,64px); line-height: 1; }
+.focus-cat-info { width: 100%; justify-content: space-between; gap: 4px; }
+.focus-cat-title { font-size: 14px; }
+.focus-cat-value { font-size: clamp(16px,2.4dvh,24px); white-space: nowrap; }
+.focus-cat-value.empty { font: 14px var(--font-main); color: var(--text-muted); }
+.game-footer { position: static; flex-shrink: 0; margin: 0 12px 8px; padding: 4px; max-width: none; }
+.footer-btn { font-size: 14px; padding: 8px; }
+.dice-opt-visual { font-size: 28px; white-space: normal; overflow-wrap: anywhere; }
+.modal-dialog { max-height: calc(100dvh - 24px); overflow-y: auto; }
+.table-wrapper { flex: 1; max-height: none; }
+@media (max-width: 600px) {
+  .game-header { padding: 6px; gap: 4px; margin: 6px 6px 0; }
+  .header-left, .header-right { gap: 4px; }
+  .turn-banner { padding: 4px 6px; gap: 4px; }
+  .turn-avatar { display: none; }
+  .view-toggle-btn { padding: 8px; }
+  #view-name { display: none; }
+  .leaderboard-strip { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 0 6px; }
+  .view-container { padding: 0 6px; }
+  .focus-player-card { padding: 8px; gap: 8px; }
+  .focus-cat-btn { padding: 5px; }
+  .focus-cat-info { flex-wrap: wrap; justify-content: center; column-gap: 6px; }
+  .focus-cat-icon { font-size: clamp(32px,5.5dvh,48px); }
+  .game-footer { margin: 0 6px 6px; }
+  .footer-btn { padding: 8px 4px; }
+}
+@media (max-height: 600px) and (min-width: 601px) {
+  .game-header { padding: 4px 8px; }
+  .focus-player-card { display: grid; grid-template-columns: 180px 1fr; }
+  .focus-header { flex-direction: column; justify-content: center; border: 0; }
+  .focus-categories-grid { height: 100%; }
+  .focus-cat-btn { flex-direction: row; }
+  .focus-cat-info { flex-wrap: wrap; }
+  .focus-cat-icon { font-size: 32px; }
+}
+
+/* Icon-only cards: 80% symbol, 20% score. */
+.focus-categories-grid .focus-cat-btn { display: grid; grid-template-rows: minmax(0,4fr) minmax(0,1fr); grid-template-columns: minmax(0,1fr); gap: 0; padding: 4px; }
+.focus-categories-grid .focus-cat-icon { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 0; }
+.focus-cat-icon svg { width: 100%; height: 100%; display: block; }
+.focus-categories-grid .focus-cat-info { justify-content: center; align-items: center; flex-wrap: nowrap; min-height: 0; }
+.focus-cat-value { font-size: clamp(14px,2.5dvh,24px); line-height: 1; }
+.focus-cat-btn:focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 2px; }
+
+.focus-cat-btn:disabled { cursor: default; }
+.focus-cat-btn:disabled:hover { transform: none; }
+.focus-cat-btn:disabled:not(.filled) { opacity: .45; }
+.focus-categories-grid .cup-icon { font-size: clamp(32px,7dvh,88px); }
+.cup-card { border-color: var(--gold-primary); background: rgba(229,193,88,.12); }
+.table-game-icon { width: 42px; height: 42px; display: block; margin: auto; }
+.table-game-icon svg { width: 100%; height: 100%; }
+#view-table.active { flex-direction: column; gap: 6px; }
+#table-cup { flex-shrink: 0; align-self: flex-end; }
+#table-cup .cup-card { padding: 4px 20px; gap: 10px; }
+#table-cup .cup-icon { width: 32px; height: 36px; }
+
+.modal-cat-icon { display: block; width: 64px; height: 64px; flex-shrink: 0; }
+.modal-cat-icon svg { width: 100%; height: 100%; }
+.dice-opt-btn { justify-content: center; min-height: 72px; padding: 8px; }
+.count-pips { display: block; width: 100%; height: clamp(64px,12dvh,100px); }
+.cup-icon svg { filter: drop-shadow(0 0 5px rgba(246,216,120,.4)); }
+
+.focus-categories-grid .cup-card:not(:disabled), #table-cup .cup-card:not(:disabled) {
+  opacity: 1; background: #30583e; border: 2px solid #ffe99a;
+  box-shadow: 0 0 18px rgba(246,216,120,.35);
+}
+.cup-card:not(:disabled) .cup-icon svg { filter: drop-shadow(0 0 7px rgba(255,233,154,.8)); }
+.cup-card:not(:disabled) .focus-cat-value { color: #fff0b8; }
+.scratch-option .dice-opt-visual { color: #ff6b70; font-size: 44px; font-weight: 800; opacity: 1; }
+.scratch-option { border-color: rgba(255,107,112,.55); background: rgba(164,35,48,.18); }
+body[data-setup-mode="both"] .setup-section:has(> #player-count-selector),
+body[data-setup-mode="both"] .setup-section:has(> .order-toggle-group),
+body[data-mode="both"] #leaderboard-strip,
+body[data-mode="both"] .focus-nav { display: none !important; }
+/* Personal play needs space for both dice and a readable scorecard. */
+body[data-mode="both"] #game-screen.active { height: auto; min-height: 100dvh; }
+body[data-mode="both"] .game-main { flex: none; }
+body[data-mode="both"] #dice-panel { flex-shrink: 0; }
+body[data-mode="both"] .focus-player-card { display: flex; flex-direction: column; }
+body[data-mode="both"] .focus-categories-grid { flex: none; grid-template-rows: repeat(4,minmax(130px,auto)); }
+.focus-categories-grid .focus-cat-btn { min-height: 110px; grid-template-rows: minmax(56px,1fr) auto; gap: 6px; }
+.focus-categories-grid .focus-cat-icon { min-height: 56px; }
+.focus-categories-grid .focus-cat-icon svg { max-height: 80px; }
+.focus-categories-grid .focus-cat-info { display: flex; flex-direction: column; gap: 6px; padding: 4px; }
+.focus-cat-title { color: var(--text-main); font-size: 14px; line-height: 1.2; }
+body[data-setup-mode="both"] #alias-setup,
+body[data-mode="both"] #turn-banner,
+body[data-mode="both"] .focus-num,
+body[data-mode="both"] .podium-stage,
+body[data-mode="both"] .podium-player-name { display: none !important; }
   </style>
 </head>
 <body>
@@ -1578,10 +1749,18 @@ thead tr th.sticky-col {
             <span class="dice-icon">⚄</span>
             <span class="dice-icon-sub">⚅</span>
           </div>
-          <h1>Tanteador de Generala</h1>
-          <p class="subtitle">Planilla profesional para hasta 8 jugadores</p>
+          <h1>Generala</h1>
+          <p class="subtitle">Dados y planilla para compartir la partida</p>
         </header>
 
+        <fieldset class="mode-picker">
+          <legend class="section-label">¿Cómo querés jugar?</legend>
+          <label><input type="radio" name="app-mode" value="play"><strong>Juego</strong><span>Tirá los dados en este dispositivo.</span></label>
+          <label><input type="radio" name="app-mode" value="score" checked><strong>Tanteador</strong><span>Anotá los puntos de todos.</span></label>
+          <label><input type="radio" name="app-mode" value="both"><strong>Juego + Tanteador</strong><span>Tirá tus dados y anotá sólo tus puntos.</span></label>
+        </fieldset>
+        <p class="hint" id="mode-help">Una persona lleva la cuenta; cada jugador puede usar sus propios dados.</p>
+        <div id="score-setup" class="setup-section">
         <!-- Player count selector -->
         <div class="setup-section">
           <div class="section-title-row">
@@ -1601,7 +1780,7 @@ thead tr th.sticky-col {
         </div>
 
         <!-- Players Alias List -->
-        <div class="setup-section">
+        <div class="setup-section" id="alias-setup">
           <div class="section-title-row">
             <label class="section-label">Jugadores y Alias</label>
             <span class="hint">Toca para editar el nombre</span>
@@ -1669,6 +1848,7 @@ thead tr th.sticky-col {
           </div>
         </div>
 
+        </div>
         <!-- Start Game Button -->
         <div class="setup-actions">
           <button type="button" id="btn-start-game" class="btn-primary glow-button">
@@ -1717,6 +1897,14 @@ thead tr th.sticky-col {
 
       <!-- Main Game Area -->
       <main class="game-main">
+        <section id="dice-panel" class="glass-panel" aria-label="Juego de dados" hidden>
+          <div class="dice-heading"><h2 id="dice-title">Tus dados</h2><span id="roll-counter" class="badge">Tiro 0 de 3</span></div>
+          <p id="dice-instruction">Tirá los cinco dados para empezar.</p>
+          <div id="dice-tray" class="dice-tray" aria-label="Seleccioná los dados que querés conservar"></div>
+          <p id="dice-result" role="status" aria-live="polite"></p>
+          <div class="dice-actions"><button type="button" id="roll-dice" class="btn-primary">Tirar dados</button><button type="button" id="reset-dice" class="btn-secondary">Nuevo turno</button></div>
+          <p class="hint">Tocá un dado para fijarlo o soltarlo. Tenés hasta tres tiros por turno.</p>
+        </section>
         
         <!-- Live Leaderboard Ribbon -->
         <div class="leaderboard-strip" id="leaderboard-strip">
@@ -1748,6 +1936,7 @@ thead tr th.sticky-col {
               </tfoot>
             </table>
           </div>
+          <div id="table-cup"></div>
         </div>
 
         <!-- VIEW 2: FOCUS PLAYER VIEW (Modo Jugador Actual para móviles) -->
@@ -1816,6 +2005,15 @@ thead tr th.sticky-col {
       </div>
     </div>
 
+    <div id="turn-score-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="turn-score-category">
+      <div class="turn-score-card glass-panel">
+        <p class="turn-score-round" id="turn-score-round">RONDA 1</p>
+        <h3 class="turn-score-category" id="turn-score-category">Puntaje anotado</h3>
+        <p class="turn-score-points" id="turn-score-points">0 puntos</p>
+        <button type="button" id="turn-score-continue" class="btn-primary">Continuar</button>
+      </div>
+    </div>
+
     <!-- VICTORY / PODIUM MODAL -->
     <div id="podium-modal" class="modal-backdrop">
       <div class="modal-dialog glass-panel podium-modal-card">
@@ -1873,7 +2071,7 @@ thead tr th.sticky-col {
           </div>
           <div class="rule-card">
             <h4>📐 Escalera</h4>
-            <p>Secuencia (1-2-3-4-5, 2-3-4-5-6 o 1-3-4-5-6).<br>
+            <p>Secuencia (1-2-3-4-5, 2-3-4-5-6, 6-1-2-3-4 o 1-3-4-5-6).<br>
             <strong>20 puntos</strong> armada / <strong>25 puntos</strong> servida (en el 1er tiro).</p>
           </div>
           <div class="rule-card">
@@ -2024,8 +2222,11 @@ thead tr th.sticky-col {
     history: [], // For undo
     isGameOver: false,
     winnerPlayerId: null,
-    viewMode: 'table' // 'table' or 'focus'
+    pendingTurn: null,
+    viewMode: 'focus' // 'table' or 'focus'
   };
+
+  let focusPlayerIndex = 0;
 
   // Helper: Active categories according to rules
   function getActiveCategories() {
@@ -2089,6 +2290,14 @@ thead tr th.sticky-col {
     btnClose: document.getElementById('modal-close')
   };
 
+  const modalTurnScore = {
+    backdrop: document.getElementById('turn-score-modal'),
+    round: document.getElementById('turn-score-round'),
+    category: document.getElementById('turn-score-category'),
+    points: document.getElementById('turn-score-points'),
+    btnContinue: document.getElementById('turn-score-continue')
+  };
+
   const modalPodium = {
     backdrop: document.getElementById('podium-modal'),
     title: document.getElementById('podium-title'),
@@ -2108,9 +2317,13 @@ thead tr th.sticky-col {
   let modalActiveContext = null; // { playerId, catId }
 
   // --- LOCAL STORAGE PERSISTENCE ---
+  function scoreStorageKey(mode) {
+    return mode === 'both' ? 'generala_personal_state_v1' : STORAGE_KEY;
+  }
+
   function saveStateToStorage() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(scoreStorageKey(state.appMode), JSON.stringify(state));
     } catch (e) {
       console.error('Failed to save to local storage', e);
     }
@@ -2118,7 +2331,7 @@ thead tr th.sticky-col {
 
   function loadStateFromStorage() {
     try {
-      const data = localStorage.getItem(STORAGE_KEY);
+      const data = localStorage.getItem(scoreStorageKey(selectedMode));
       if (data) {
         return JSON.parse(data);
       }
@@ -2140,12 +2353,13 @@ thead tr th.sticky-col {
   // --- SETUP SCREEN LOGIC ---
   let tempPlayerCount = 2;
   let tempAliases = {};
+  let editingCurrentPlayers = false;
 
   function renderSetupPlayers() {
     setupInputs.playersList.innerHTML = '';
     setupInputs.countBadge.textContent = `${tempPlayerCount} ${tempPlayerCount === 1 ? 'Jugador' : 'Jugadores'}`;
 
-    for (let i = 1; i <= tempPlayerCount; i++) {
+    for (let i = 1; i <= (selectedMode === 'both' ? 1 : tempPlayerCount); i++) {
       const row = document.createElement('div');
       row.className = 'player-input-row';
       const color = PLAYER_COLORS[(i - 1) % PLAYER_COLORS.length];
@@ -2160,6 +2374,13 @@ thead tr th.sticky-col {
       const input = row.querySelector('.player-alias-input');
       input.addEventListener('input', (e) => {
         tempAliases[i] = e.target.value.trim();
+        if (editingCurrentPlayers) {
+          const player = state.players.find(p => p.playerNumber === i);
+          if (player) {
+            player.alias = tempAliases[i] || `Jugador ${i}`;
+            saveStateToStorage();
+          }
+        }
       });
 
       setupInputs.playersList.appendChild(row);
@@ -2217,6 +2438,9 @@ thead tr th.sticky-col {
       if (saved) {
         sound.playClick();
         state = saved;
+        if (selectedMode === 'both') state.players.forEach(p => { p.alias = 'Vos'; });
+        setMode(selectedMode === 'both' ? 'both' : 'score');
+        state.appMode = activeMode;
         sound.enabled = state.rules.sound;
         showScreen('game');
         renderGame();
@@ -2231,13 +2455,13 @@ thead tr th.sticky-col {
     // Focus nav
     gameUI.focusPrev.addEventListener('click', () => {
       sound.playClick();
-      state.activePlayerIndex = (state.activePlayerIndex - 1 + state.players.length) % state.players.length;
+      focusPlayerIndex = (focusPlayerIndex - 1 + state.players.length) % state.players.length;
       renderGame();
     });
 
     gameUI.focusNext.addEventListener('click', () => {
       sound.playClick();
-      state.activePlayerIndex = (state.activePlayerIndex + 1) % state.players.length;
+      focusPlayerIndex = (focusPlayerIndex + 1) % state.players.length;
       renderGame();
     });
 
@@ -2264,10 +2488,20 @@ thead tr th.sticky-col {
       if (e.target === modalScore.backdrop) closeScoreModal();
     });
 
+    modalTurnScore.btnContinue.addEventListener('click', advanceTurn);
+    modalTurnScore.backdrop.addEventListener('click', (e) => {
+      if (e.target === modalTurnScore.backdrop) advanceTurn();
+    });
+
     // Podium Actions
     modalPodium.btnRematch.addEventListener('click', handleRematch);
     modalPodium.btnNewSetup.addEventListener('click', () => {
       modalPodium.backdrop.classList.remove('open');
+      editingCurrentPlayers = true;
+      tempPlayerCount = state.players.length;
+      tempAliases = Object.fromEntries(state.players.map(p => [p.playerNumber, p.alias]));
+      renderSetupPlayers();
+      setupInputs.countSelector.querySelectorAll('.pill-btn').forEach(b => b.classList.toggle('active', Number(b.dataset.count) === tempPlayerCount));
       showScreen('setup');
       checkSavedGame();
     });
@@ -2278,6 +2512,11 @@ thead tr th.sticky-col {
 
   // --- GAME INITIALIZATION ---
   function startNewGameFromSetup() {
+    if (selectedMode === 'play') {
+      setMode('play'); showScreen('game'); renderDice(); return;
+    }
+    setMode(selectedMode);
+    editingCurrentPlayers = false;
     sound.playScore();
 
     // Read players list
@@ -2285,8 +2524,9 @@ thead tr th.sticky-col {
     let players = [];
 
     playerInputs.forEach((input, idx) => {
+      if (selectedMode === 'both' && idx > 0) return;
       const playerNum = idx + 1;
-      const alias = input.value.trim() || `Jugador ${playerNum}`;
+      const alias = selectedMode === 'both' ? 'Vos' : input.value.trim() || `Jugador ${playerNum}`;
       players.push({
         id: `p_${playerNum}`,
         playerNumber: playerNum,
@@ -2296,7 +2536,7 @@ thead tr th.sticky-col {
     });
 
     // Handle Turn Order: Random or Sequence
-    const orderMode = setupInputs.orderRandomBtn.classList.contains('active') ? 'random' : 'sequence';
+    const orderMode = selectedMode !== 'both' && setupInputs.orderRandomBtn.classList.contains('active') ? 'random' : 'sequence';
     if (orderMode === 'random') {
       // Shuffle array (Fisher-Yates)
       for (let i = players.length - 1; i > 0; i--) {
@@ -2316,6 +2556,7 @@ thead tr th.sticky-col {
 
     // Initialize state
     state = {
+      appMode: selectedMode,
       players: players,
       rules: rules,
       orderMode: orderMode,
@@ -2325,7 +2566,8 @@ thead tr th.sticky-col {
       history: [],
       isGameOver: false,
       winnerPlayerId: null,
-      viewMode: 'table'
+      pendingTurn: null,
+    viewMode: 'focus'
     };
 
     // Init score table
@@ -2353,9 +2595,12 @@ thead tr th.sticky-col {
 
     state.players = players;
     state.activePlayerIndex = 0;
+    focusPlayerIndex = 0;
     state.currentRound = 1;
     state.scores = {};
     state.history = [];
+    state.pendingTurn = null;
+    state.diceTurns = {};
     state.isGameOver = false;
     state.winnerPlayerId = null;
 
@@ -2370,6 +2615,11 @@ thead tr th.sticky-col {
   function confirmExitToSetup() {
     if (confirm('¿Deseas volver a la pantalla de configuración? La partida actual quedará guardada.')) {
       sound.playClick();
+      editingCurrentPlayers = true;
+      tempPlayerCount = state.players.length;
+      tempAliases = Object.fromEntries(state.players.map(p => [p.playerNumber, p.alias]));
+      renderSetupPlayers();
+      setupInputs.countSelector.querySelectorAll('.pill-btn').forEach(b => b.classList.toggle('active', Number(b.dataset.count) === tempPlayerCount));
       showScreen('setup');
       checkSavedGame();
     }
@@ -2377,6 +2627,7 @@ thead tr th.sticky-col {
 
   // --- SCREEN SWITCHING ---
   function showScreen(name) {
+    if (name === 'game') { editingCurrentPlayers = false; state.viewMode = 'focus'; focusPlayerIndex = state.activePlayerIndex; }
     if (name === 'setup') {
       screens.setup.classList.add('active');
       screens.game.classList.remove('active');
@@ -2450,15 +2701,24 @@ thead tr th.sticky-col {
     }
 
     // Undo button state
-    gameUI.btnUndo.disabled = state.history.length === 0;
+    gameUI.btnUndo.disabled = !state.pendingTurn;
   }
 
   // --- RENDERING ---
   function renderGame() {
+    renderDice();
+    const tableMode = state.viewMode === 'table';
+    gameUI.viewTable.classList.toggle('active', tableMode);
+    gameUI.viewFocus.classList.toggle('active', !tableMode);
+    gameUI.viewIcon.textContent = tableMode ? '🎲' : '📋';
+    gameUI.viewName.textContent = tableMode ? 'Jugadas' : 'Planilla';
     updateRoundAndTurn();
     renderLeaderboard();
     if (state.viewMode === 'table') {
       renderTableScorecard();
+      const tableCup = document.getElementById('table-cup');
+      tableCup.innerHTML = '';
+      tableCup.appendChild(createCupButton());
     } else {
       renderFocusView();
     }
@@ -2504,7 +2764,8 @@ thead tr th.sticky-col {
       `;
       th.addEventListener('click', () => {
         sound.playClick();
-        state.activePlayerIndex = idx;
+        focusPlayerIndex = idx;
+        state.viewMode = 'focus';
         renderGame();
       });
       gameUI.tableHeadRow.appendChild(th);
@@ -2518,7 +2779,9 @@ thead tr th.sticky-col {
       // Category label cell
       const tdLabel = document.createElement('td');
       tdLabel.className = 'sticky-col category-col';
-      tdLabel.innerHTML = `<span class="cat-icon">${cat.icon}</span> <span>${cat.name}</span>`;
+      tdLabel.innerHTML = `<span class="table-game-icon" aria-hidden="true">${categoryIcon(cat)}</span>`;
+      tdLabel.setAttribute('aria-label', cat.name);
+      tdLabel.title = cat.name;
       tr.appendChild(tdLabel);
 
       // Score cells for each player
@@ -2575,14 +2838,44 @@ thead tr th.sticky-col {
     });
   }
 
+  // Scalable, functional game symbols. Names remain available to screen readers.
+  function categoryIcon(cat) {
+    const gold = '#f6d878', mint = '#49dcb1';
+    const circle = (x, y, color = gold, r = 10) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}"/>`;
+    let shapes = '';
+    if (cat.type === 'number') {
+      const positions = {
+        1: [[50,50]], 2: [[26,26],[74,74]], 3: [[26,26],[50,50],[74,74]],
+        4: [[26,26],[74,26],[26,74],[74,74]],
+        5: [[26,26],[74,26],[50,50],[26,74],[74,74]],
+        6: [[26,24],[74,24],[26,50],[74,50],[26,76],[74,76]]
+      };
+      shapes = `<rect x="4" y="4" width="92" height="92" rx="18" fill="#183d2e" stroke="${gold}" stroke-width="3"/>`;
+      shapes += positions[cat.diceValue].map(([x,y]) => circle(x,y,gold,8)).join('');
+    } else if (cat.id === 'E') {
+      shapes = [[12,88],[31,69],[50,50],[69,31],[88,12]].map(([x,y]) => circle(x,y)).join('');
+    } else if (cat.id === 'F') {
+      shapes = [[18,28],[50,28],[82,28]].map(([x,y]) => circle(x,y,gold,13)).join('');
+      shapes += [[34,72],[66,72]].map(([x,y]) => circle(x,y,mint,13)).join('');
+    } else if (cat.id === 'P') {
+      shapes = [[14,28],[38,28],[62,28],[86,28]].map(([x,y]) => circle(x,y,gold,10)).join('');
+      shapes += circle(50,72,mint,13);
+    } else {
+      shapes = cat.id === 'DG'
+        ? '<text x="50" y="43" text-anchor="middle" font-size="46">👑</text><text x="50" y="94" text-anchor="middle" font-size="46">👑</text>'
+        : '<text x="50" y="80" text-anchor="middle" font-size="82">👑</text>';
+    }
+    return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" focusable="false">${shapes}</svg>`;
+  }
+
   // Render Focus View (Single Player)
   function renderFocusView() {
-    const activePlayer = state.players[state.activePlayerIndex];
+    const activePlayer = state.players[focusPlayerIndex] || state.players[state.activePlayerIndex];
     if (!activePlayer) return;
 
     gameUI.focusNum.textContent = activePlayer.playerNumber;
     gameUI.focusNum.style.backgroundColor = activePlayer.color;
-    gameUI.focusName.textContent = activePlayer.alias;
+    gameUI.focusName.textContent = activeMode === 'both' ? 'Tus puntos' : activePlayer.alias;
     gameUI.focusTotalScore.textContent = `Total: ${getPlayerTotal(activePlayer.id)} pts`;
 
     const activeCats = getActiveCategories();
@@ -2592,26 +2885,26 @@ thead tr th.sticky-col {
       const entry = state.scores[activePlayer.id] ? state.scores[activePlayer.id][cat.id] : null;
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'focus-cat-btn';
+      btn.disabled = !canScore(activePlayer.id, cat.id) && !isPendingScore(activePlayer.id, cat.id);
+      btn.className = 'focus-cat-btn ' + (cat.type === 'number' ? 'number-card' : 'major-card');
+      btn.title = isPendingScore(activePlayer.id, cat.id) ? 'Quitar la jugada de este turno' : cat.name;
+      btn.setAttribute('aria-label', `${cat.name}: ${entry ? (entry.isScratched ? 'tachada, 0 puntos' : entry.score + ' puntos') : 'sin anotar'}. ${isPendingScore(activePlayer.id, cat.id) ? 'Tocar para quitar la jugada de este turno' : 'Tocar para anotar'}`);
 
-      let valDisplay = '<span class="focus-cat-value empty">Anotar</span>';
+      let valDisplay = '<span class="focus-cat-value empty">+</span>';
       if (entry) {
         btn.classList.add('filled');
         if (entry.isScratched) {
           btn.classList.add('scratched');
-          valDisplay = '<span class="focus-cat-value scratched">0 (Tachada)</span>';
+          valDisplay = '<span class="focus-cat-value scratched">0 ✕</span>';
         } else {
-          const servStar = entry.isServida ? ' ★ Servida' : '';
+          const servStar = entry.isServida ? ' ★' : '';
           valDisplay = `<span class="focus-cat-value">${entry.score}${servStar}</span>`;
         }
       }
 
       btn.innerHTML = `
-        <div class="focus-cat-info">
-          <span class="focus-cat-icon">${cat.icon}</span>
-          <span class="focus-cat-title">${cat.name}</span>
-        </div>
-        ${valDisplay}
+        <span class="focus-cat-icon" aria-hidden="true">${categoryIcon(cat)}</span>
+        <div class="focus-cat-info"><span class="focus-cat-title">${cat.name}</span>${valDisplay}</div>
       `;
 
       btn.addEventListener('click', () => {
@@ -2620,6 +2913,56 @@ thead tr th.sticky-col {
 
       gameUI.focusCategoriesGrid.appendChild(btn);
     });
+    const cup = createCupButton();
+    cup.style.gridArea = '4 / 3';
+    gameUI.focusCategoriesGrid.appendChild(cup);
+  }
+
+  function isPendingScore(playerId, catId) {
+    return state.pendingTurn?.playerId === playerId && state.pendingTurn.catId === catId;
+  }
+
+  function canScore(playerId, catId) {
+    // Keep empty categories tappable in the personal scorecard. The dialog explains
+    // that a roll is required, and submitScore still rejects any invalid score.
+    return !state.isGameOver && !state.pendingTurn &&
+      state.players[state.activePlayerIndex]?.id === playerId &&
+      !state.scores[playerId]?.[catId] && getActiveCategories().some(c => c.id === catId);
+  }
+
+  function createCupButton() {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'focus-cat-btn cup-card';
+    btn.disabled = !state.pendingTurn || state.isGameOver;
+    btn.setAttribute('aria-label', 'Cubilete: confirmar la jugada y pasar al siguiente turno');
+    btn.title = btn.disabled ? 'Anotá una jugada antes de pasar el turno' : 'Pasar al siguiente turno';
+    btn.innerHTML = '<span class="focus-cat-icon cup-icon" aria-hidden="true"><svg viewBox="0 0 100 100" focusable="false"><path d="M22 18 H78 L68 86 Q50 96 32 86 Z" fill="#f6d878" stroke="#f6d878" stroke-width="5"/><ellipse cx="50" cy="18" rx="28" ry="10" fill="#a06b20" stroke="#f6d878" stroke-width="5"/><circle cx="43" cy="50" r="5" fill="#57370e"/><circle cx="57" cy="64" r="5" fill="#57370e"/></svg></span><span class="focus-cat-value" aria-hidden="true">→</span>';
+    btn.addEventListener('click', advanceTurn);
+    return btn;
+  }
+
+  function advanceTurn() {
+    if (!state.pendingTurn || state.isGameOver) return;
+    if (state.diceTurns) delete state.diceTurns[state.pendingTurn.playerId];
+    modalTurnScore.backdrop.classList.remove('open');
+    state.pendingTurn = null;
+    state.activePlayerIndex = (state.activePlayerIndex + 1) % state.players.length;
+    focusPlayerIndex = state.activePlayerIndex;
+    closeScoreModal();
+    saveStateToStorage();
+    renderGame();
+  }
+
+  function showTurnScoreCard() {
+    const pending = state.pendingTurn;
+    const entry = state.scores[pending.playerId]?.[pending.catId];
+    const category = CATEGORIES.find(cat => cat.id === pending.catId);
+    if (!entry || !category) return;
+    modalTurnScore.round.textContent = `RONDA ${pending.round}`;
+    modalTurnScore.category.textContent = entry.isScratched ? `${category.name} tachada` : category.name;
+    modalTurnScore.points.textContent = entry.isScratched ? '0 puntos' : `${entry.score} puntos`;
+    modalTurnScore.backdrop.classList.add('open');
   }
 
   // View Mode Toggle
@@ -2642,19 +2985,69 @@ thead tr th.sticky-col {
     saveStateToStorage();
   }
 
+  // Score only the committed dice; scratching remains a deliberate legal choice.
+  function diceScore(playerId, catId) {
+    const dice = state.diceTurns?.[playerId];
+    const cat = CATEGORIES.find(c => c.id === catId);
+    if (rolling || !dice || dice.rolls < 1 || !cat) return null;
+    const counts = Array(7).fill(0);
+    dice.values.forEach(v => counts[v]++);
+    if (cat.type === 'number') return { score: counts[cat.diceValue] * cat.diceValue, isServida: false, win: false };
+    const served = dice.rolls === 1;
+    const groups = counts.filter(Boolean).sort((a,b)=>a-b).join(',');
+    const straight = ['12345','23456','12346','13456'].includes([...dice.values].sort().join(''));
+    const matches = catId === 'E' ? straight : catId === 'F' ? groups === '2,3' : catId === 'P' ? counts.some(n=>n>=4) : counts.includes(5);
+    const eligible = catId !== 'DG' || (state.rules.dobleGenerala && state.scores[playerId]?.G?.score > 0 && !state.scores[playerId].G.isScratched);
+    if (!matches || !eligible) return { score: 0, isServida: false, win: false };
+    return { score: catId === 'G' ? (served ? 60 : 50) : (served ? cat.servida : cat.armada), isServida: served, win: catId === 'G' && served && state.rules.generalaServida === 'win' };
+  }
+
   // --- SCORE SELECTION MODAL ---
   function openScoreModal(playerId, catId) {
+    if (isPendingScore(playerId, catId)) {
+      handleUndo();
+      closeScoreModal();
+      return;
+    }
+    if (!canScore(playerId, catId)) return;
     sound.playClick();
     const player = state.players.find(p => p.id === playerId);
     const cat = CATEGORIES.find(c => c.id === catId);
     if (!player || !cat) return;
 
     modalActiveContext = { playerId, catId };
-    modalScore.catIcon.textContent = cat.icon;
+    modalScore.catIcon.innerHTML = categoryIcon(cat);
     modalScore.catName.textContent = cat.name;
-    modalScore.playerSub.textContent = `Anotando para ${player.alias} (#${player.playerNumber})`;
+    modalScore.playerSub.textContent = cat.type === 'number' ? '' : `Anotando para ${player.alias} (#${player.playerNumber})`;
+    modalScore.playerSub.hidden = activeMode === 'both' || cat.type === 'number';
 
     modalScore.optionsContainer.innerHTML = '';
+
+    if (activeMode === 'both') {
+      const result = diceScore(playerId, catId);
+      if (!result) {
+        const note = document.createElement('p');
+        note.textContent = 'Primero tirá los dados para poder anotar o tachar esta categoría.';
+        modalScore.optionsContainer.appendChild(note);
+        modalScore.backdrop.classList.add('open');
+        return;
+      }
+      if (result.score > 0) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'major-opt-btn personal-score-btn';
+        button.textContent = result.win ? 'Anotar Generala servida · ganar la partida' : `Anotar ${result.score} puntos${result.isServida ? ' · servida' : ''}`;
+        button.onclick = () => result.win ? handleGeneralaServidaInstantWin(playerId) : submitScore(playerId, catId, result.score, false, result.isServida);
+        modalScore.optionsContainer.appendChild(button);
+      } else {
+        const note = document.createElement('p');
+        note.textContent = 'Estos dados no suman puntos en esta categoría. Podés tacharla con 0 puntos.';
+        modalScore.optionsContainer.appendChild(note);
+      }
+      modalScore.btnScratch.onclick = () => submitScore(playerId, catId, 0, true, false);
+      modalScore.backdrop.classList.add('open');
+      return;
+    }
 
     if (cat.type === 'number') {
       // 1 to 5 dice for numbers
@@ -2667,14 +3060,9 @@ thead tr th.sticky-col {
         btn.type = 'button';
         btn.className = 'dice-opt-btn';
 
-        // Render dice icons
-        const diceGlyphs = Array(diceCount).fill(cat.icon).join('');
-
-        btn.innerHTML = `
-          <span class="dice-opt-visual">${diceGlyphs}</span>
-          <span class="dice-opt-label">${diceCount} ${diceCount === 1 ? 'dado' : 'dados'}</span>
-          <span class="dice-opt-score">${score}</span>
-        `;
+        const positions = Array.from({ length: diceCount }, (_, i) => [50 + (i - (diceCount - 1) / 2) * 19, 50]);
+        btn.setAttribute('aria-label', `${diceCount} ${diceCount === 1 ? 'dado' : 'dados'}: ${score} puntos para ${player.alias}`);
+        btn.innerHTML = `<svg class="count-pips" viewBox="0 0 100 100" aria-hidden="true" focusable="false">${positions.map(([x,y]) => `<circle cx="${x}" cy="${y}" r="8" fill="#f6d878"/>`).join('')}</svg>`;
 
         btn.addEventListener('click', () => {
           submitScore(playerId, catId, score, false, false);
@@ -2683,6 +3071,13 @@ thead tr th.sticky-col {
         grid.appendChild(btn);
       }
 
+      const zero = document.createElement('button');
+      zero.type = 'button';
+      zero.className = 'dice-opt-btn scratch-option';
+      zero.setAttribute('aria-label', `Tachar: 0 puntos para ${player.alias}`);
+      zero.innerHTML = '<span class="dice-opt-visual" aria-hidden="true">✕</span>';
+      zero.addEventListener('click', () => submitScore(playerId, catId, 0, true, false));
+      grid.appendChild(zero);
       modalScore.optionsContainer.appendChild(grid);
 
     } else if (cat.type === 'major') {
@@ -2783,6 +3178,12 @@ thead tr th.sticky-col {
   }
 
   function submitScore(playerId, catId, score, isScratched, isServida) {
+    if (rolling) return;
+    if (!canScore(playerId, catId)) return;
+    if (activeMode === 'both') {
+      const result = diceScore(playerId, catId);
+      if (!result || (isScratched ? score !== 0 || isServida : result.win || result.score <= 0 || score !== result.score || !!isServida !== result.isServida)) return;
+    }
     if (isScratched) {
       sound.playScratch();
     } else {
@@ -2808,33 +3209,27 @@ thead tr th.sticky-col {
       isServida: !!isServida
     };
 
-    // Auto-advance turn if score was entered for the player currently in turn
-    const currentPlayer = state.players[state.activePlayerIndex];
-    if (currentPlayer && currentPlayer.id === playerId) {
-      state.activePlayerIndex = (state.activePlayerIndex + 1) % state.players.length;
-    }
+    state.pendingTurn = { playerId, catId, round: state.currentRound };
 
+    focusPlayerIndex = state.players.findIndex(p => p.id === playerId);
     closeScoreModal();
     saveStateToStorage();
     renderGame();
 
     // Check game completion
     checkGameFinished();
+    if (activeMode === 'both' && !state.isGameOver) showTurnScoreCard();
   }
 
   // --- UNDO FUNCTIONALITY ---
   function handleUndo() {
-    if (state.history.length === 0) return;
+    if (!state.pendingTurn) return;
     sound.playClick();
-
-    const lastAction = state.history.pop();
-    if (lastAction.previousEntry) {
-      state.scores[lastAction.playerId][lastAction.catId] = lastAction.previousEntry;
-    } else {
-      delete state.scores[lastAction.playerId][lastAction.catId];
-    }
-
-    state.activePlayerIndex = lastAction.prevTurnIndex;
+    const { playerId, catId } = state.pendingTurn;
+    delete state.scores[playerId][catId];
+    state.history.pop();
+    state.pendingTurn = null;
+    focusPlayerIndex = state.activePlayerIndex;
     state.isGameOver = false;
     state.winnerPlayerId = null;
 
@@ -2844,6 +3239,9 @@ thead tr th.sticky-col {
 
   // --- GENERALA SERVIDA INSTANT WIN ---
   function handleGeneralaServidaInstantWin(playerId) {
+    if (rolling) return;
+    if (!canScore(playerId, 'G')) return;
+    if (activeMode === 'both' && !diceScore(playerId, 'G')?.win) return;
     sound.playWin();
     closeScoreModal();
 
@@ -2895,6 +3293,10 @@ thead tr th.sticky-col {
     } else {
       modalPodium.title.textContent = '¡Fin de la Partida!';
       modalPodium.subtitle.textContent = `¡Felicitaciones ${winner.player.alias}, campeón indiscutido!`;
+    }
+
+    if (activeMode === 'both') {
+      modalPodium.subtitle.textContent = `Terminaste con ${winner.total} puntos.`;
     }
 
     // Render 3D Podium Pillars
@@ -3034,8 +3436,123 @@ thead tr th.sticky-col {
       .replace(/'/g, '&#039;');
   }
 
+
+  // Device-local dice: scoring stays manual so the scorer can record other devices.
+  let selectedMode = 'score';
+  let activeMode = 'score';
+  let soloDice = freshDice();
+  let rolling = false;
+  const pipPositions = [[], [4], [0,8], [0,4,8], [0,2,6,8], [0,2,4,6,8], [0,2,3,5,6,8]];
+  function freshDice() { return { values: [1,2,3,4,5], held: [false,false,false,false,false], rolls: 0 }; }
+  function currentDice() {
+    if (activeMode === 'play') return soloDice;
+    if (!state.diceTurns) state.diceTurns = {};
+    const id = state.players[state.activePlayerIndex]?.id;
+    if (!state.diceTurns[id]) state.diceTurns[id] = freshDice();
+    return state.diceTurns[id];
+  }
+  function saveDice() {
+    if (activeMode !== 'play') saveStateToStorage();
+    else { try { localStorage.setItem('generala_solo_dice_v1', JSON.stringify(soloDice)); } catch {} }
+  }
+  function setMode(mode) {
+    activeMode = mode;
+    modalPodium.btnRematch.textContent = mode === 'both' ? '🎲 Volver a jugar' : '🎲 ¡Revancha! (Mismos Jugadores)';
+    document.body.dataset.mode = mode;
+    document.getElementById('dice-panel').hidden = mode === 'score';
+  }
+  function randomDie() {
+    const value = new Uint32Array(1);
+    do { crypto.getRandomValues(value); } while (value[0] >= 4294967292);
+    return value[0] % 6 + 1;
+  }
+  function renderDice() {
+    if (activeMode === 'score') return;
+    const dice = currentDice();
+    const pending = activeMode === 'both' && !!state.pendingTurn;
+    const over = activeMode === 'both' && (state.isGameOver || pending);
+    document.getElementById('dice-title').textContent = 'Tus dados';
+    document.getElementById('roll-counter').textContent = `Tiro ${dice.rolls} de 3`;
+    document.getElementById('dice-instruction').textContent = over ? (state.isGameOver ? 'Partida terminada.' : 'Confirmá la jugada con el cubilete para pasar el turno.') : rolling ? 'Girando…' : dice.rolls === 0 ? 'Tirá los cinco dados para empezar.' : dice.rolls === 3 ? 'Terminaste tus tiros. Compartí el resultado o anotá los puntos.' : 'Elegí qué dados conservar y tirá los restantes.';
+    const tray = document.getElementById('dice-tray');
+    tray.replaceChildren();
+    dice.values.forEach((value,index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'die' + (rolling && !dice.held[index] ? ' rolling' : '');
+      button.dataset.rolled = String(dice.rolls > 0);
+      button.setAttribute('aria-pressed', String(dice.held[index]));
+      button.setAttribute('aria-label', `Dado ${index+1}: ${dice.rolls ? value : 'sin tirar'}, ${dice.held[index] ? 'fijo' : 'libre'}`);
+      button.disabled = rolling || !dice.rolls || dice.rolls === 3 || over;
+      const face = document.createElement('span'); face.className = 'die-face'; face.setAttribute('aria-hidden','true');
+      for(let pip=0;pip<9;pip++) { const dot=document.createElement('span'); dot.className='die-pip'+(pipPositions[value].includes(pip)?' on':''); face.appendChild(dot); }
+      const label=document.createElement('span'); label.className='die-label'; label.textContent=dice.held[index]?'Fijo':dice.rolls?'Libre':'—';
+      button.append(face,label);
+      button.onclick=()=>{ if(rolling || dice.rolls===0 || dice.rolls>=3) return; dice.held[index]=!dice.held[index]; saveDice(); renderDice(); };
+      tray.appendChild(button);
+    });
+    const rollButton = document.getElementById('roll-dice');
+    rollButton.disabled = rolling || dice.rolls >= 3 || dice.held.every(Boolean) || over;
+    rollButton.textContent = rolling ? 'Girando…' : dice.rolls === 3 ? 'Tres tiros completos' : dice.rolls ? `Tirar ${dice.held.filter(v=>!v).length} dados · ${dice.rolls+1}º tiro` : 'Tirar los 5 dados';
+    document.getElementById('reset-dice').disabled = rolling || !dice.rolls || over;
+    document.getElementById('dice-result').textContent = dice.rolls && !rolling ? `Resultado: ${dice.values.join(' · ')}${dice.held.every(Boolean) && dice.rolls<3 ? ' — Todos fijos. Soltá alguno para volver a tirar.' : ''}` : '';
+  }
+  function rollDice() {
+    const dice=currentDice();
+    if(rolling || dice.rolls>=3 || dice.held.every(Boolean) || (activeMode==='both' && (state.isGameOver || state.pendingTurn))) return;
+    rolling=true;
+    const result=dice.values.map((v,i)=>dice.held[i]?v:randomDie());
+    // Commit immediately: leaving or reloading during animation cannot grant another throw.
+    dice.values=result; dice.rolls++; saveDice(); renderDice();
+    sound.playClick();
+    setTimeout(()=>{ rolling=false; renderDice(); }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 100 : 750);
+  }
+  function initDice() {
+    try {
+      const saved=JSON.parse(localStorage.getItem('generala_solo_dice_v1'));
+      if(saved && Number.isInteger(saved.rolls) && saved.rolls>=0 && saved.rolls<=3 && saved.values?.length===5 && saved.values.every(v=>Number.isInteger(v)&&v>=1&&v<=6) && saved.held?.length===5 && saved.held.every(v=>typeof v==='boolean')) soloDice=saved;
+    } catch {}
+    document.querySelectorAll('input[name="app-mode"]').forEach(input=>input.addEventListener('change',()=>{
+      selectedMode=input.value;
+      editingCurrentPlayers=false;
+      document.body.dataset.setupMode=selectedMode;
+      renderSetupPlayers();
+      checkSavedGame();
+      document.getElementById('mode-help').textContent=selectedMode==='both'?'Tu planilla personal: anotá sólo tus puntos y confirmá cada turno con el cubilete.':selectedMode==='play'?'Tirá tus dados en este dispositivo.':'Una persona lleva la cuenta de todos los jugadores.';
+      document.getElementById('score-setup').hidden=selectedMode==='play';
+      setupInputs.btnResume.hidden=selectedMode==='play';
+      setupInputs.btnStart.querySelector('span').textContent=selectedMode==='play'?'Jugar con dados':'¡Comenzar partida!';
+    }));
+    document.getElementById('roll-dice').onclick=rollDice;
+    document.getElementById('reset-dice').onclick=()=>{
+      if(rolling || !confirm('¿Empezar un nuevo turno? Se borrará el resultado de estos dados.')) return;
+      Object.assign(currentDice(),freshDice()); saveDice(); renderDice();
+    };
+  }
+
+  // Optional agent access to the same scoreboard displayed in the interface.
+  if (document.modelContext?.registerTool) {
+    const lifecycle = new AbortController();
+    window.addEventListener('pagehide', () => lifecycle.abort(), { once: true });
+    try {
+      Promise.resolve(document.modelContext.registerTool({
+        name: 'read_generala_scoreboard',
+        description: 'Read the current Generala players, totals and game status.',
+        inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+        annotations: { readOnlyHint: true, untrustedContentHint: true },
+        execute(input) {
+          if (!input || typeof input !== 'object' || Array.isArray(input) || Object.keys(input).length) {
+            throw new Error('Expected an empty object.');
+          }
+          return { isGameOver: state.isGameOver, players: getPlayerRankings().map(r => ({ alias: r.player.alias, total: r.total, filled: r.filled })) };
+        }
+      }, { signal: lifecycle.signal })).catch(() => {});
+    } catch (_) { /* Unsupported implementations do not affect the game. */ }
+  }
+
   // --- INITIALIZATION ---
   function init() {
+    initDice();
     setupEventListeners();
     renderSetupPlayers();
     checkSavedGame();
